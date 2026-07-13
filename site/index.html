@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seal Point — Websites engineered for impact</title>
+<meta name="description" content="Seal Point builds custom, cinematic websites. No compromise.">
+<link rel="icon" type="image/png" href="assets/img/coin.png">
+<link rel="stylesheet" href="css/main.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three.module.js",
+    "three/addons/geometries/RoundedBoxGeometry.js": "./vendor/RoundedBoxGeometry.js",
+    "three/addons/environments/RoomEnvironment.js": "./vendor/RoomEnvironment.js",
+    "three/addons/loaders/GLTFLoader.js": "./vendor/GLTFLoader.js",
+    "three/addons/utils/BufferGeometryUtils.js": "./vendor/BufferGeometryUtils.js",
+    "ogl": "./vendor/ogl.js"
+  }
+}
+</script>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="loader" aria-hidden="true">
+  <img class="loader-coin" src="assets/img/coin.png" alt="">
+  <div class="loader-word">SEAL&nbsp;POINT</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+  <div class="loader-pct">0%</div>
+</div>
+
+<!-- Film canvas (scroll-scrubbed frame sequence) -->
+<canvas id="film"></canvas>
+
+<!-- Site-wide grain -->
+<div id="grain" aria-hidden="true"></div>
+
+<!-- Wax-seal scroll progress -->
+<div id="seal-progress" aria-hidden="true">
+  <img class="seal-ghost" src="assets/img/coin.png" alt="">
+  <div class="seal-fill-clip"><img class="seal-solid" src="assets/img/coin.png" alt=""></div>
+</div>
+
+<!-- Top bar -->
+<header id="topbar">
+  <span class="wordmark">SEAL&nbsp;POINT</span>
+  <a class="top-cta" href="mailto:hello@sealpoint.studio">Start a project</a>
+</header>
+
+<!-- Fixed overlay panels, driven by the master scrub timeline -->
+<div id="stage" aria-live="off">
+
+  <section class="panel" id="hero">
+    <h1 class="hero-title" aria-label="Seal Point"><span class="hero-letters"></span></h1>
+    <p class="hero-sub">Websites engineered for impact.</p>
+    <div class="hero-scrollcue"><span class="cue-line"></span>Scroll</div>
+  </section>
+
+  <section class="panel" id="portfolio">
+    <div class="portfolio-box">
+      <div class="pf-aurora" aria-hidden="true"></div>
+      <div class="pf-inner">
+        <div class="pf-head">
+          <h2 class="pf-title">What we do</h2>
+          <div class="pf-dots" aria-hidden="true">
+            <span class="pf-dot is-active"></span>
+            <span class="pf-dot"></span>
+            <span class="pf-dot"></span>
+          </div>
+        </div>
+        <div class="pf-stage">
+          <canvas class="pf-ice" aria-label="Project ice blocks"></canvas>
+          <div class="pf-hud" aria-hidden="true">
+            <svg class="pf-hud-lines" viewBox="0 0 128 72" preserveAspectRatio="none" fill="none">
+              <g class="pf-ln">
+                <polyline points="21,18 41,18 53,32"/>
+                <polyline points="104,29 86,34"/>
+                <polyline points="95,55 73,45"/>
+              </g>
+              <g class="pf-constellation">
+                <polyline points="30,52 46,59 60,53 74,60"/>
+                <polyline points="53,20 65,14 79,22"/>
+              </g>
+              <g class="pf-nodes">
+                <circle cx="53" cy="32" r="0.8"/><circle cx="86" cy="34" r="0.8"/><circle cx="73" cy="45" r="0.8"/>
+                <circle cx="46" cy="59" r="0.6"/><circle cx="65" cy="14" r="0.6"/><circle cx="30" cy="52" r="0.5"/>
+              </g>
+            </svg>
+            <div class="pf-hud-callout">
+              <span class="pf-hud-code">PORTFOLIO_CO_01</span>
+              <span class="pf-hud-kind">RESIDENTIAL</span>
+            </div>
+            <div class="pf-hud-temp">
+              <span class="pf-hud-lbl">TEMP</span>
+              <span class="pf-hud-t1">21.60</span>
+              <span class="pf-hud-t2">-05.78</span>
+            </div>
+            <button class="pf-hud-explore" type="button">
+              <span class="pf-hud-date">D 06.28.2024</span>
+              <span class="pf-hud-cta">CLICK TO EXPLORE</span>
+            </button>
+            <span class="pf-hud-cross pf-x1">+</span>
+            <span class="pf-hud-cross pf-x2">+</span>
+            <span class="pf-hud-cross pf-x3">＋</span>
+          </div>
+        </div>
+        <div class="pf-caption">
+          <span class="pf-cap-tag">01</span>
+          <div class="pf-cap-text">
+            <h3 class="pf-cap-title">Macoyosh Builders</h3>
+            <p class="pf-cap-pitch">Custom homes, built digital.</p>
+          </div>
+          <button class="pf-cap-link" type="button">View project&nbsp;→</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="pillars">
+    <h2 class="section-head" data-k>Three pillars</h2>
+    <div class="pillar" id="pillar-design">
+      <svg class="pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+        <path d="M8 44 L14 18 L19 30 L24 6 L29 30 L34 14 L40 44"/>
+        <path d="M4 44 H44" opacity=".45"/>
+      </svg>
+      <h3>Design</h3>
+      <p>Identity-first art direction. Every pixel placed on purpose.</p>
+    </div>
+    <div class="pillar" id="pillar-dev">
+      <svg class="pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+        <path d="M10 44 L16 10 L22 28 L24 20 L26 28 L32 10 L38 44"/>
+        <path d="M16 36 H32" opacity=".45"/>
+        <path d="M4 44 H44" opacity=".45"/>
+      </svg>
+      <h3>Development</h3>
+      <p>Hand-built, fast, and precise. Engineered like it matters — because it does.</p>
+    </div>
+    <div class="pillar" id="pillar-motion">
+      <svg class="pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+        <path d="M6 44 L12 22 L17 34 L24 8 L31 34 L36 22 L42 44"/>
+        <path d="M24 8 L24 44" opacity=".35"/>
+        <path d="M4 44 H44" opacity=".45"/>
+      </svg>
+      <h3>Motion</h3>
+      <p>Scroll-driven, cinematic, alive. Interfaces that move like film.</p>
+    </div>
+  </section>
+
+  <section class="panel" id="work">
+    <h2 class="section-head" data-k>Work</h2>
+    <div class="cards">
+      <a class="card" href="#" aria-label="Macoyosh Builders">
+        <svg class="card-trace" preserveAspectRatio="none"><rect x="1" y="1" rx="6"/></svg>
+        <h3>Macoyosh Builders</h3>
+        <p>Custom homes, built digital.</p>
+        <span class="card-go">View case&nbsp;→</span>
+      </a>
+      <a class="card" href="#" aria-label="Macoyosh Drafting">
+        <svg class="card-trace" preserveAspectRatio="none"><rect x="1" y="1" rx="6"/></svg>
+        <h3>Macoyosh Drafting</h3>
+        <p>Blueprints meet clean design.</p>
+        <span class="card-go">View case&nbsp;→</span>
+      </a>
+      <a class="card" href="#" aria-label="Corshelle Realty">
+        <svg class="card-trace" preserveAspectRatio="none"><rect x="1" y="1" rx="6"/></svg>
+        <h3>Corshelle Realty</h3>
+        <p>Listings that sell themselves.</p>
+        <span class="card-go">View case&nbsp;→</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="panel" id="finale">
+    <h2 class="finale-title" data-k>Let&rsquo;s build something.</h2>
+    <div class="finale-ctas">
+      <a class="btn btn-solid" href="mailto:hello@sealpoint.studio">Start a project</a>
+      <a class="btn btn-ghost" href="#" id="see-work">See our work</a>
+    </div>
+  </section>
+
+</div>
+
+<!-- Scroll track: supplies the scrub distance -->
+<div id="track"></div>
+
+<footer id="footer">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <img src="assets/img/coin.png" alt="Seal Point coin emblem">
+      <span>SEAL&nbsp;POINT</span>
+    </div>
+    <nav class="foot-links" aria-label="Social links">
+      <a href="#">Instagram</a>
+      <a href="#">X</a>
+      <a href="#">LinkedIn</a>
+      <a href="mailto:hello@sealpoint.studio">Email</a>
+    </nav>
+    <p class="foot-fine">© 2026 Seal Point. Sealed, not settled.</p>
+  </div>
+</footer>
+
+<!-- Project detail overlays (opened when a carousel card is clicked) -->
+<div id="pf-details">
+  <section class="pf-detail" id="detail-builders" aria-hidden="true">
+    <div class="pf-detail-scroll" data-lenis-prevent>
+      <button class="pf-detail-close" aria-label="Close project">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="pf-detail-inner">
+        <span class="pf-detail-kicker">Project 01 — Custom Homes</span>
+        <h2 class="pf-detail-title">Macoyosh Builders</h2>
+        <p class="pf-detail-lede">Custom homes, built digital.</p>
+        <div class="pf-detail-hero"></div>
+        <div class="pf-detail-cols">
+          <div class="pf-detail-meta">
+            <div><span>Client</span><p>Macoyosh Builders</p></div>
+            <div><span>Year</span><p>2026</p></div>
+            <div><span>Services</span><p>Design · Development · Motion</p></div>
+          </div>
+          <div class="pf-detail-copy">
+            <p>Add the project overview here — the brief, the challenge, and how Seal Point approached it.</p>
+            <p>This is placeholder copy. Replace it with the story of the build, the results, and anything worth showcasing.</p>
+          </div>
+        </div>
+        <div class="pf-detail-gallery">
+          <div class="pf-detail-shot"></div>
+          <div class="pf-detail-shot"></div>
+        </div>
+        <a class="btn btn-solid" href="#">Visit site</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="pf-detail" id="detail-drafting" aria-hidden="true">
+    <div class="pf-detail-scroll" data-lenis-prevent>
+      <button class="pf-detail-close" aria-label="Close project">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="pf-detail-inner">
+        <span class="pf-detail-kicker">Project 02 — Drafting</span>
+        <h2 class="pf-detail-title">Macoyosh Drafting</h2>
+        <p class="pf-detail-lede">Blueprints meet clean design.</p>
+        <div class="pf-detail-hero"></div>
+        <div class="pf-detail-cols">
+          <div class="pf-detail-meta">
+            <div><span>Client</span><p>Macoyosh Drafting</p></div>
+            <div><span>Year</span><p>2026</p></div>
+            <div><span>Services</span><p>Web · Brand · UX</p></div>
+          </div>
+          <div class="pf-detail-copy">
+            <p>Add the project overview here — the brief, the challenge, and how Seal Point approached it.</p>
+            <p>This is placeholder copy. Replace it with the story of the build, the results, and anything worth showcasing.</p>
+          </div>
+        </div>
+        <div class="pf-detail-gallery">
+          <div class="pf-detail-shot"></div>
+          <div class="pf-detail-shot"></div>
+        </div>
+        <a class="btn btn-solid" href="#">Visit site</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="pf-detail" id="detail-realty" aria-hidden="true">
+    <div class="pf-detail-scroll" data-lenis-prevent>
+      <button class="pf-detail-close" aria-label="Close project">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="pf-detail-inner">
+        <span class="pf-detail-kicker">Project 03 — Real Estate</span>
+        <h2 class="pf-detail-title">Corshelle Realty</h2>
+        <p class="pf-detail-lede">Listings that sell themselves.</p>
+        <div class="pf-detail-hero"></div>
+        <div class="pf-detail-cols">
+          <div class="pf-detail-meta">
+            <div><span>Client</span><p>Corshelle Realty</p></div>
+            <div><span>Year</span><p>2026</p></div>
+            <div><span>Services</span><p>Web · Listings · Motion</p></div>
+          </div>
+          <div class="pf-detail-copy">
+            <p>Add the project overview here — the brief, the challenge, and how Seal Point approached it.</p>
+            <p>This is placeholder copy. Replace it with the story of the build, the results, and anything worth showcasing.</p>
+          </div>
+        </div>
+        <div class="pf-detail-gallery">
+          <div class="pf-detail-shot"></div>
+          <div class="pf-detail-shot"></div>
+        </div>
+        <a class="btn btn-solid" href="#">Visit site</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="vendor/gsap.min.js"></script>
+<script src="vendor/ScrollTrigger.min.js"></script>
+<script src="vendor/lenis.min.js"></script>
+<script src="js/manifest.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
