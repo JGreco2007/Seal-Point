@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Start a Project — Seal Point</title>
+<meta name="description" content="Tell Seal Point about your project and pick a day you're free to talk it through.">
+<link rel="icon" type="image/png" href="assets/img/coin.png">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/start-project.css">
+</head>
+<body class="startp-body">
+
+<header id="topbar">
+  <a class="wordmark" href="index.html">SEAL&nbsp;POINT</a>
+  <div class="topbar-contact">
+    <a href="mailto:sealpointagency@gmail.com">sealpointagency@gmail.com</a>
+    <a href="tel:+15205390646">(520) 539-0646</a>
+  </div>
+  <a class="top-cta" href="index.html">Back to site</a>
+</header>
+
+<main class="startp-main">
+  <div class="startp-card">
+    <div class="startp-intro" id="sp-intro">
+      <span class="startp-kicker">Start a project</span>
+      <h1 class="startp-title">Tell us what you're building.</h1>
+      <p class="startp-lede">Share a few details and a day you're free — we'll follow up to lock in a time to talk it through.</p>
+    </div>
+
+    <form id="start-form" class="startp-form">
+      <div class="startp-field">
+        <label for="sp-name">Name</label>
+        <input type="text" id="sp-name" name="name" autocomplete="name" required>
+      </div>
+
+      <div class="startp-field">
+        <label id="sp-service-label">Service</label>
+        <div class="startp-tabs" id="sp-service-tabs" role="group" aria-labelledby="sp-service-label">
+          <button type="button" class="startp-tab" data-value="Website">Website</button>
+        </div>
+        <input type="hidden" id="sp-service" name="service">
+      </div>
+
+      <div class="startp-field">
+        <label for="sp-details">Tell us about your business and the website you want</label>
+        <textarea id="sp-details" name="details" rows="4" required></textarea>
+      </div>
+
+      <div class="startp-field">
+        <label for="sp-date">Day you're available</label>
+        <input type="date" id="sp-date" name="date" required>
+      </div>
+
+      <!-- Honeypot: real visitors never see or fill this in (hidden via .startp-honeypot in CSS, not
+           an inline style — the site's CSP has no 'unsafe-inline' for style-src). Bots that fill every
+           field in a form indiscriminately trip it; Web3Forms silently discards anything that does. -->
+      <input type="checkbox" name="botcheck" class="startp-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+      <button type="submit" class="btn btn-solid startp-submit">Submit</button>
+      <p class="startp-note" id="sp-note">We'll get back to you within a day or two.</p>
+      <p class="startp-error" id="sp-error" role="alert" hidden></p>
+    </form>
+
+    <div class="startp-success" id="sp-success" hidden>
+      <span class="startp-kicker">Sent</span>
+      <h2 class="startp-success-title">Got it — thanks!</h2>
+      <p class="startp-lede">We'll follow up soon to lock in a time to talk it through.</p>
+    </div>
+  </div>
+</main>
+
+<footer id="startp-footer">
+  <p class="foot-fine">© 2026 Seal Point. Sealed, not settled.</p>
+</footer>
+
+<script src="js/start-project.js" defer></script>
+</body>
+</html>

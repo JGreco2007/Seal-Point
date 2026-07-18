@@ -10,3 +10,20 @@ desktop.ini
 *.log
 *.tmp
 *~
+
+# Raw source/reference material — not served by the deployed site, already processed into
+# site/assets/ (gallery photos -> site/assets/images/, hero footage -> site/assets/video/,
+# ice-slab reference -> site/assets/models/). Kept out of the repo to avoid bloating it.
+/Builders1.png
+/Builders2.png
+/Drafting1.png
+/Drafting2.png
+/Realty1.png
+/Realty2.png
+/IceShading.png
+/IceSlabExample.glb
+/ice.2glb.glb
+/IceTexture/
+/CorshelleRealty Video/
+/MacoyoshBuilders Video/
+/MacoyoshDrafting Video/

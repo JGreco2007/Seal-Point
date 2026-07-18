@@ -45,7 +45,11 @@
 <!-- Top bar -->
 <header id="topbar">
   <span class="wordmark">SEAL&nbsp;POINT</span>
-  <a class="top-cta" href="mailto:hello@sealpoint.studio">Start a project</a>
+  <div class="topbar-contact">
+    <a href="mailto:sealpointagency@gmail.com">sealpointagency@gmail.com</a>
+    <a href="tel:+15205390646">(520) 539-0646</a>
+  </div>
+  <a class="top-cta" href="start-project.html">Start a project</a>
 </header>
 
 <!-- Fixed overlay panels, driven by the master scrub timeline -->
@@ -62,7 +66,7 @@
       <div class="pf-aurora" aria-hidden="true"></div>
       <div class="pf-inner">
         <div class="pf-head">
-          <h2 class="pf-title">What we do</h2>
+          <h2 class="pf-title">What we've made</h2>
           <div class="pf-dots" aria-hidden="true">
             <span class="pf-dot is-active"></span>
             <span class="pf-dot"></span>
@@ -72,41 +76,24 @@
         <div class="pf-stage">
           <canvas class="pf-ice" aria-label="Project ice blocks"></canvas>
           <div class="pf-hud" aria-hidden="true">
-            <svg class="pf-hud-lines" viewBox="0 0 128 72" preserveAspectRatio="none" fill="none">
-              <g class="pf-ln">
-                <polyline points="21,18 41,18 53,32"/>
-                <polyline points="104,29 86,34"/>
-                <polyline points="95,55 73,45"/>
-              </g>
-              <g class="pf-constellation">
-                <polyline points="30,52 46,59 60,53 74,60"/>
-                <polyline points="53,20 65,14 79,22"/>
-              </g>
-              <g class="pf-nodes">
-                <circle cx="53" cy="32" r="0.8"/><circle cx="86" cy="34" r="0.8"/><circle cx="73" cy="45" r="0.8"/>
-                <circle cx="46" cy="59" r="0.6"/><circle cx="65" cy="14" r="0.6"/><circle cx="30" cy="52" r="0.5"/>
-              </g>
-            </svg>
+            <span class="pf-hud-bracket pf-hud-bracket-tl"></span>
+            <span class="pf-hud-bracket pf-hud-bracket-tr"></span>
+            <span class="pf-hud-bracket pf-hud-bracket-bl"></span>
+            <span class="pf-hud-bracket pf-hud-bracket-br"></span>
             <div class="pf-hud-callout">
-              <span class="pf-hud-code">PORTFOLIO_CO_01</span>
+              <span class="pf-hud-code">CO_01</span>
               <span class="pf-hud-kind">RESIDENTIAL</span>
-            </div>
-            <div class="pf-hud-temp">
-              <span class="pf-hud-lbl">TEMP</span>
-              <span class="pf-hud-t1">21.60</span>
-              <span class="pf-hud-t2">-05.78</span>
+              <span class="pf-hud-date">06.28.2024</span>
             </div>
             <button class="pf-hud-explore" type="button">
-              <span class="pf-hud-date">D 06.28.2024</span>
-              <span class="pf-hud-cta">CLICK TO EXPLORE</span>
+              <span class="pf-hud-ring"></span>
+              <span class="pf-hud-cta">Click to explore</span>
             </button>
-            <span class="pf-hud-cross pf-x1">+</span>
-            <span class="pf-hud-cross pf-x2">+</span>
-            <span class="pf-hud-cross pf-x3">＋</span>
           </div>
         </div>
         <div class="pf-caption">
           <span class="pf-cap-tag">01</span>
+          <span class="pf-cap-rule" aria-hidden="true"></span>
           <div class="pf-cap-text">
             <h3 class="pf-cap-title">Macoyosh Builders</h3>
             <p class="pf-cap-pitch">Custom homes, built digital.</p>
@@ -117,64 +104,61 @@
     </div>
   </section>
 
-  <section class="panel" id="pillars">
-    <h2 class="section-head" data-k>Three pillars</h2>
-    <div class="pillar" id="pillar-design">
-      <svg class="pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
-        <path d="M8 44 L14 18 L19 30 L24 6 L29 30 L34 14 L40 44"/>
-        <path d="M4 44 H44" opacity=".45"/>
-      </svg>
-      <h3>Design</h3>
-      <p>Identity-first art direction. Every pixel placed on purpose.</p>
+  <section class="panel" id="what-we-do">
+    <div class="wwd-header">
+      <h2 class="section-head" data-k>What we do</h2>
+      <p class="wwd-lede">Design, development, and motion aren't separate services — they're one craft.
+        Everything on this page, the scroll choreography, the 3D ice, the cinematic transitions, is
+        built from the same toolkit. Ready for your own site next.</p>
     </div>
-    <div class="pillar" id="pillar-dev">
-      <svg class="pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
-        <path d="M10 44 L16 10 L22 28 L24 20 L26 28 L32 10 L38 44"/>
-        <path d="M16 36 H32" opacity=".45"/>
-        <path d="M4 44 H44" opacity=".45"/>
-      </svg>
-      <h3>Development</h3>
-      <p>Hand-built, fast, and precise. Engineered like it matters — because it does.</p>
-    </div>
-    <div class="pillar" id="pillar-motion">
-      <svg class="pillar-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
-        <path d="M6 44 L12 22 L17 34 L24 8 L31 34 L36 22 L42 44"/>
-        <path d="M24 8 L24 44" opacity=".35"/>
-        <path d="M4 44 H44" opacity=".45"/>
-      </svg>
-      <h3>Motion</h3>
-      <p>Scroll-driven, cinematic, alive. Interfaces that move like film.</p>
-    </div>
-  </section>
-
-  <section class="panel" id="work">
-    <h2 class="section-head" data-k>Work</h2>
-    <div class="cards">
-      <a class="card" href="#" aria-label="Macoyosh Builders">
-        <svg class="card-trace" preserveAspectRatio="none"><rect x="1" y="1" rx="6"/></svg>
-        <h3>Macoyosh Builders</h3>
-        <p>Custom homes, built digital.</p>
-        <span class="card-go">View case&nbsp;→</span>
-      </a>
-      <a class="card" href="#" aria-label="Macoyosh Drafting">
-        <svg class="card-trace" preserveAspectRatio="none"><rect x="1" y="1" rx="6"/></svg>
-        <h3>Macoyosh Drafting</h3>
-        <p>Blueprints meet clean design.</p>
-        <span class="card-go">View case&nbsp;→</span>
-      </a>
-      <a class="card" href="#" aria-label="Corshelle Realty">
-        <svg class="card-trace" preserveAspectRatio="none"><rect x="1" y="1" rx="6"/></svg>
-        <h3>Corshelle Realty</h3>
-        <p>Listings that sell themselves.</p>
-        <span class="card-go">View case&nbsp;→</span>
-      </a>
+    <div class="wwd-grid">
+      <div class="wwd-tile" id="wwd-design">
+        <div class="wwd-demo wwd-demo--design" aria-hidden="true">
+          <div class="wwd-design-layer wwd-design-layer--wire">
+            <span class="wwd-wire-line wwd-wire-line--1"></span>
+            <span class="wwd-wire-line wwd-wire-line--2"></span>
+            <span class="wwd-wire-line wwd-wire-line--3"></span>
+            <span class="wwd-wire-box"></span>
+          </div>
+          <div class="wwd-design-layer wwd-design-layer--final">
+            <span class="wwd-final-line wwd-final-line--1"></span>
+            <span class="wwd-final-line wwd-final-line--2"></span>
+            <span class="wwd-final-accent"></span>
+            <span class="wwd-final-box"></span>
+          </div>
+        </div>
+        <h3>Design</h3>
+        <p>Identity-first art direction. Every layout, color, and type choice made on purpose, not by template.</p>
+      </div>
+      <div class="wwd-tile" id="wwd-development">
+        <div class="wwd-demo wwd-demo--dev" aria-hidden="true">
+          <pre class="wwd-code" aria-hidden="true"><code>&lt;<span class="wwd-tag">Visit</span> <span class="wwd-attr">site</span>=<span class="wwd-str">"true"</span> /&gt;</code></pre>
+          <span class="wwd-rendered-btn">Visit site</span>
+        </div>
+        <h3>Development</h3>
+        <p>Hand-built, fast, and precise — real code, not page-builder scaffolding, engineered to last.</p>
+      </div>
+      <div class="wwd-tile" id="wwd-motion">
+        <div class="wwd-demo wwd-demo--motion" aria-hidden="true">
+          <span class="wwd-kchar">M</span><span class="wwd-kchar">O</span><span class="wwd-kchar">T</span><span class="wwd-kchar">I</span><span class="wwd-kchar">O</span><span class="wwd-kchar">N</span>
+        </div>
+        <h3>Motion</h3>
+        <p>Scroll-driven, cinematic, alive — the same kinetic type and film-timed transitions you've been scrolling through.</p>
+      </div>
+      <div class="wwd-tile" id="wwd-dimension">
+        <div class="wwd-demo wwd-demo--dimension" aria-hidden="true">
+          <canvas class="wwd-3d-canvas"></canvas>
+        </div>
+        <h3>Dimension</h3>
+        <p>Real 3D, not stock illustrations — WebGL objects that catch light and follow your cursor, like the ice above.</p>
+      </div>
     </div>
   </section>
 
   <section class="panel" id="finale">
     <h2 class="finale-title" data-k>Let&rsquo;s build something.</h2>
     <div class="finale-ctas">
-      <a class="btn btn-solid" href="mailto:hello@sealpoint.studio">Start a project</a>
+      <a class="btn btn-solid" href="start-project.html">Start a project</a>
       <a class="btn btn-ghost" href="#" id="see-work">See our work</a>
     </div>
   </section>
@@ -190,11 +174,9 @@
       <img src="assets/img/coin.png" alt="Seal Point coin emblem">
       <span>SEAL&nbsp;POINT</span>
     </div>
-    <nav class="foot-links" aria-label="Social links">
-      <a href="#">Instagram</a>
-      <a href="#">X</a>
-      <a href="#">LinkedIn</a>
-      <a href="mailto:hello@sealpoint.studio">Email</a>
+    <nav class="foot-links" aria-label="Contact links">
+      <a href="mailto:sealpointagency@gmail.com">Email</a>
+      <a href="tel:+15205390646">(520) 539-0646</a>
     </nav>
     <p class="foot-fine">© 2026 Seal Point. Sealed, not settled.</p>
   </div>
@@ -203,15 +185,30 @@
 <!-- Project detail overlays (opened when a carousel card is clicked) -->
 <div id="pf-details">
   <section class="pf-detail" id="detail-builders" aria-hidden="true">
+    <div class="pf-detail-atmos" aria-hidden="true"></div>
     <div class="pf-detail-scroll" data-lenis-prevent>
       <button class="pf-detail-close" aria-label="Close project">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
       <div class="pf-detail-inner">
-        <span class="pf-detail-kicker">Project 01 — Custom Homes</span>
+        <span class="pf-detail-kicker">Custom Homes · Southern Arizona</span>
         <h2 class="pf-detail-title">Macoyosh Builders</h2>
         <p class="pf-detail-lede">Custom homes, built digital.</p>
-        <div class="pf-detail-hero"></div>
+        <div class="pf-detail-hero">
+          <canvas class="pf-dhero-canvas" aria-hidden="true"></canvas>
+          <video class="pf-dhero-video" muted loop playsinline preload="none">
+            <source src="assets/video/macoyosh-builders-hero.mp4" type="video/mp4">
+          </video>
+          <div class="pf-dhero-text pf-dhero-text--builders">
+            <p class="pf-dhero-pre">Macoyosh Builders</p>
+            <h3 class="pf-dhero-title">Luxury Home Building<br>in Southern Arizona</h3>
+            <p class="pf-dhero-sub">For those who refuse to live in someone else's vision.</p>
+          </div>
+        </div>
+        <a class="pf-detail-explore" href="https://macoyoshbuilders.com" target="_blank" rel="noopener noreferrer">
+          Click to explore
+          <svg class="pf-detail-explore-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </a>
         <div class="pf-detail-cols">
           <div class="pf-detail-meta">
             <div><span>Client</span><p>Macoyosh Builders</p></div>
@@ -219,29 +216,50 @@
             <div><span>Services</span><p>Design · Development · Motion</p></div>
           </div>
           <div class="pf-detail-copy">
-            <p>Add the project overview here — the brief, the challenge, and how Seal Point approached it.</p>
-            <p>This is placeholder copy. Replace it with the story of the build, the results, and anything worth showcasing.</p>
+            <p>Macoyosh Builders has spent years building custom homes across southern Arizona with a level of craft that never once showed up online. Their previous site read as an afterthought: dated, slow, and forgettable enough that most visitors left before they'd seen a single project.</p>
+            <p>We approached the rebuild the way you'd approach a home itself, starting from the materials and working outward. Full width photography, deliberate pacing, and enough space for every build to be seen properly. The result finally carries the same standard of craft the company has always built to, and it reads like the work of a builder people are willing to pay for.</p>
           </div>
         </div>
         <div class="pf-detail-gallery">
-          <div class="pf-detail-shot"></div>
-          <div class="pf-detail-shot"></div>
+          <div class="pf-detail-shot"><canvas class="pf-shot-canvas" aria-hidden="true"></canvas></div>
+          <div class="pf-detail-shot"><canvas class="pf-shot-canvas" aria-hidden="true"></canvas></div>
         </div>
-        <a class="btn btn-solid" href="#">Visit site</a>
+        <blockquote class="pf-detail-quote">
+          <div class="pf-detail-quote-body">
+            <div class="pf-detail-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p>Seal Point took our website from problematic to jaw dropping. They redesigned the entire site better than anything we could have imagined or requested. And immediately after it went live the phone started ringing with potential clients! &mdash; Macoyosh Builders Team</p>
+          </div>
+        </blockquote>
+        <a class="btn btn-solid" href="https://macoyoshbuilders.com" target="_blank" rel="noopener noreferrer">Visit site</a>
       </div>
     </div>
   </section>
 
   <section class="pf-detail" id="detail-drafting" aria-hidden="true">
+    <div class="pf-detail-atmos" aria-hidden="true"></div>
     <div class="pf-detail-scroll" data-lenis-prevent>
       <button class="pf-detail-close" aria-label="Close project">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
       <div class="pf-detail-inner">
-        <span class="pf-detail-kicker">Project 02 — Drafting</span>
+        <span class="pf-detail-kicker">Blueprint Design · Custom Luxury Homes</span>
         <h2 class="pf-detail-title">Macoyosh Drafting</h2>
         <p class="pf-detail-lede">Blueprints meet clean design.</p>
-        <div class="pf-detail-hero"></div>
+        <div class="pf-detail-hero">
+          <canvas class="pf-dhero-canvas" aria-hidden="true"></canvas>
+          <video class="pf-dhero-video" muted loop playsinline preload="none">
+            <source src="assets/video/macoyosh-drafting-hero.mp4" type="video/mp4">
+          </video>
+          <div class="pf-dhero-text pf-dhero-text--drafting">
+            <p class="pf-dhero-pre">Macoyosh Drafting</p>
+            <h3 class="pf-dhero-title">Custom Blueprints &amp;<br>Architectural Drafting</h3>
+            <p class="pf-dhero-sub">For those who demand precision in every line.</p>
+          </div>
+        </div>
+        <a class="pf-detail-explore" href="https://macoyoshdrafting.com" target="_blank" rel="noopener noreferrer">
+          Click to explore
+          <svg class="pf-detail-explore-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </a>
         <div class="pf-detail-cols">
           <div class="pf-detail-meta">
             <div><span>Client</span><p>Macoyosh Drafting</p></div>
@@ -249,29 +267,50 @@
             <div><span>Services</span><p>Web · Brand · UX</p></div>
           </div>
           <div class="pf-detail-copy">
-            <p>Add the project overview here — the brief, the challenge, and how Seal Point approached it.</p>
-            <p>This is placeholder copy. Replace it with the story of the build, the results, and anything worth showcasing.</p>
+            <p>Macoyosh Drafting produces blueprints for custom luxury homes, a business built on precision, yet their website carried none of that discipline. It had gone untouched for years and generated almost no inquiries in that time, a quiet problem for a company whose work depends on being found by the right people.</p>
+            <p>The new site was built with the same attention to structure that goes into their drawings: clear hierarchy, considered typography, and nothing left to chance. Inquiries started arriving almost immediately, several from people who found the firm online, more new business in the first few weeks than the previous site had produced in years.</p>
           </div>
         </div>
         <div class="pf-detail-gallery">
-          <div class="pf-detail-shot"></div>
-          <div class="pf-detail-shot"></div>
+          <div class="pf-detail-shot"><canvas class="pf-shot-canvas" aria-hidden="true"></canvas></div>
+          <div class="pf-detail-shot"><canvas class="pf-shot-canvas" aria-hidden="true"></canvas></div>
         </div>
-        <a class="btn btn-solid" href="#">Visit site</a>
+        <blockquote class="pf-detail-quote">
+          <div class="pf-detail-quote-body">
+            <div class="pf-detail-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p>We asked Seal Point to make a competitive website and give it an extra something to make it stand out from other sites in our field. Wow wow wow! The dynamic design and unforgettable layout of the site was well worth every penny of investment. &mdash; Macoyosh Drafting</p>
+          </div>
+        </blockquote>
+        <a class="btn btn-solid" href="https://macoyoshdrafting.com" target="_blank" rel="noopener noreferrer">Visit site</a>
       </div>
     </div>
   </section>
 
   <section class="pf-detail" id="detail-realty" aria-hidden="true">
+    <div class="pf-detail-atmos" aria-hidden="true"></div>
     <div class="pf-detail-scroll" data-lenis-prevent>
       <button class="pf-detail-close" aria-label="Close project">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
       </button>
       <div class="pf-detail-inner">
-        <span class="pf-detail-kicker">Project 03 — Real Estate</span>
+        <span class="pf-detail-kicker">Land Sales · Southern Arizona</span>
         <h2 class="pf-detail-title">Corshelle Realty</h2>
         <p class="pf-detail-lede">Listings that sell themselves.</p>
-        <div class="pf-detail-hero"></div>
+        <div class="pf-detail-hero">
+          <canvas class="pf-dhero-canvas" aria-hidden="true"></canvas>
+          <video class="pf-dhero-video" muted loop playsinline preload="none">
+            <source src="assets/video/corshelle-realty-hero.mp4" type="video/mp4">
+          </video>
+          <div class="pf-dhero-text pf-dhero-text--realty">
+            <p class="pf-dhero-pre">Corshelle Realty</p>
+            <h3 class="pf-dhero-title">Southern Arizona's<br>Finest Untouched Ground</h3>
+            <p class="pf-dhero-sub">Land that fits more than a budget — more space, more sky, more privacy.</p>
+          </div>
+        </div>
+        <a class="pf-detail-explore" href="https://corshellerealty.com" target="_blank" rel="noopener noreferrer">
+          Click to explore
+          <svg class="pf-detail-explore-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </a>
         <div class="pf-detail-cols">
           <div class="pf-detail-meta">
             <div><span>Client</span><p>Corshelle Realty</p></div>
@@ -279,15 +318,21 @@
             <div><span>Services</span><p>Web · Listings · Motion</p></div>
           </div>
           <div class="pf-detail-copy">
-            <p>Add the project overview here — the brief, the challenge, and how Seal Point approached it.</p>
-            <p>This is placeholder copy. Replace it with the story of the build, the results, and anything worth showcasing.</p>
+            <p>Corshelle Realty sells land across southern Arizona, and until recently, they didn't have a website at all. Every deal came through referrals and word of mouth, which worked well enough, but it also meant the business was invisible to anyone outside their existing network.</p>
+            <p>We gave them a real foundation instead of a placeholder: a place to list land properly, describe it well, and let buyers find them directly rather than waiting on a referral. For a company that has always run on relationships, having a presence that keeps working when they're not in the room is a meaningful shift, and the first real infrastructure they've had to grow beyond word of mouth.</p>
           </div>
         </div>
         <div class="pf-detail-gallery">
-          <div class="pf-detail-shot"></div>
-          <div class="pf-detail-shot"></div>
+          <div class="pf-detail-shot"><canvas class="pf-shot-canvas" aria-hidden="true"></canvas></div>
+          <div class="pf-detail-shot"><canvas class="pf-shot-canvas" aria-hidden="true"></canvas></div>
         </div>
-        <a class="btn btn-solid" href="#">Visit site</a>
+        <blockquote class="pf-detail-quote">
+          <div class="pf-detail-quote-body">
+            <div class="pf-detail-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p>I hired Seal Point to create a very niche site for my real estate company as well as run my social media. My niche is very specific so there were no examples of other sites I could give them. Nevertheless they reinvented the wheel and created a luxury layout that far surpasses every other real estate website I've seen. While many real estate social media posts look very cookie cutter and predictable, Seal Point made my posts engaging, entertaining and powerful. It's been a tremendous load off my mind and allows me to focus on serving my clients better. &mdash; Michelle Palafox, Corshelle Realty</p>
+          </div>
+        </blockquote>
+        <a class="btn btn-solid" href="https://corshellerealty.com" target="_blank" rel="noopener noreferrer">Visit site</a>
       </div>
     </div>
   </section>

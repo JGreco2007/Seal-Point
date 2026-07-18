@@ -3,14 +3,57 @@
    Gold #D4A24C = the ONLY interactive color · Ice #C7ECFA lives in video only */
 
 @font-face {
-  font-family: 'Anton';
-  src: url('../fonts/anton-latin.woff2') format('woff2');
-  font-weight: 400; font-display: swap;
+  font-family: 'Cabinet Grotesk';
+  src: url('../fonts/cabinet-grotesk-500.woff2') format('woff2');
+  font-weight: 500; font-display: swap;
 }
 @font-face {
   font-family: 'Inter';
   src: url('../fonts/inter-latin.woff2') format('woff2');
   font-weight: 100 900; font-display: swap;
+}
+/* Client hero-video overlay type only (.pf-dhero-*) — each client's own real hero font,
+   matching their actual live site, not the Seal Point design system. */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  src: url('../fonts/cormorant-garamond-300.woff2') format('woff2');
+  font-weight: 300; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  src: url('../fonts/cormorant-garamond-400italic.woff2') format('woff2');
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'Fraunces';
+  src: url('../fonts/fraunces-400.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Fraunces';
+  src: url('../fonts/fraunces-400italic.woff2') format('woff2');
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+/* HUD/technical layer only (.pf-hud, .wwd-code) — same literal typeface igloo.inc's own HUD uses
+   (confirmed directly from their font-face declarations, not assumed from "similar vibe"). Replaces
+   --mono's old plain system-font stack, which rendered as a different font on every OS and was never
+   actually a deliberate choice. Three weights loaded to match every real weight --mono usages need
+   (400 base, 600 .pf-hud-explore, 700 .pf-hud-code/.pf-hud-cta) — same "load exactly the weights used,
+   pin them explicitly" discipline as --display's own Cabinet Grotesk fix elsewhere in this file. */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('../fonts/ibm-plex-mono-400.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('../fonts/ibm-plex-mono-600.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('../fonts/ibm-plex-mono-700.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
 }
 
 :root {
@@ -19,9 +62,17 @@
   --fog: #9CA3A8;
   --gold: #D4A24C;
   --gold-dim: rgba(212, 162, 76, .35);
-  --display: 'Anton', 'Arial Narrow', sans-serif;
+  --display: 'Cabinet Grotesk', 'Arial Narrow', sans-serif;
   --body: 'Inter', system-ui, sans-serif;
-  --mono: ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', 'Consolas', 'Courier New', monospace;
+  --mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', 'Consolas', 'Courier New', monospace;
+  /* the icy grayish-blue wash behind the ice blocks (.portfolio-box) — shared with the project
+     detail overlays (.pf-detail) so opening one continues the same backdrop instead of cutting
+     to black */
+  --ice-bg: radial-gradient(140% 110% at 50% 0%, #DAE3EA 0%, #C4CFDB 35%, #AAB8C6 65%, #93A3B4 100%);
+  /* dark text for content that sits directly on --ice-bg (.pf-detail) — the light background
+     means the site's usual white/--fog text (tuned for dark panels) would wash out here */
+  --ink: #182430;
+  --ink-soft: #3D4A54;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -83,7 +134,7 @@ a { color: var(--gold); text-decoration: none; }
   0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(212,162,76,0)); }
   50% { transform: scale(1.05); filter: drop-shadow(0 0 22px rgba(212,162,76,.35)); }
 }
-.loader-word { font-family: var(--display); font-size: 15px; letter-spacing: .55em; color: var(--fog); padding-left: .55em; }
+.loader-word { font-family: var(--display); font-weight: 500; font-size: 15px; letter-spacing: .55em; color: var(--fog); padding-left: .55em; }
 .loader-bar { width: min(300px, 60vw); height: 2px; background: var(--structure); overflow: hidden; }
 .loader-fill { width: 0%; height: 100%; background: var(--gold); transition: width .25s ease; }
 .loader-pct { font-size: 11px; letter-spacing: .25em; color: var(--fog); opacity: .6; }
@@ -122,6 +173,7 @@ a { color: var(--gold); text-decoration: none; }
 }
 .wordmark {
   font-family: var(--display);
+  font-weight: 500;
   font-size: 15px; letter-spacing: .5em;
   color: var(--fog);
   user-select: none;
@@ -135,6 +187,30 @@ a { color: var(--gold); text-decoration: none; }
   transition: border-color .3s, background .3s, color .3s;
 }
 .top-cta:hover { border-color: var(--gold); background: var(--gold); color: var(--void); }
+.topbar-contact { display: flex; align-items: center; gap: 22px; }
+.topbar-contact a {
+  font-size: 12px; font-weight: 600; letter-spacing: .03em;
+  color: var(--fog);
+  border-bottom: 1px solid transparent;
+  transition: color .3s, border-color .3s;
+}
+.topbar-contact a:hover { color: var(--gold); border-color: var(--gold); }
+/* At full size, "SEAL POINT" (.5em letter-spacing) + "START A PROJECT" together need ~327px, exactly
+   the entire available width at a 375px viewport (0 margin either side) — any narrower and they
+   collide/the pill wraps to 2 lines ("START A / PROJECT"), overlapping the wordmark. Scaled down
+   together here so both stay on one line with real breathing room at real phone widths. */
+@media (max-width: 600px) {
+  .wordmark { font-size: 12px; letter-spacing: .22em; }
+  .top-cta { font-size: 11px; letter-spacing: .06em; padding: 8px 13px; white-space: nowrap; }
+}
+/* .topbar-contact (email/phone) has nowhere near enough room to coexist with the wordmark + CTA once
+   either one starts wrapping — same crowded-topbar problem the media query above exists for, just one
+   more item added to it. The footer already carries the same email/phone (see [[mobile-responsiveness-
+   audit]] for the topbar's own existing space math), so dropping it here below tablet width loses
+   nothing, it's just not the only place to find it. */
+@media (max-width: 900px) {
+  .topbar-contact { display: none; }
+}
 
 /* ---------- overlay panels ---------- */
 #stage { position: fixed; inset: 0; z-index: 20; pointer-events: none; }
@@ -156,7 +232,14 @@ a { color: var(--gold); text-decoration: none; }
 #hero { align-items: flex-start; justify-content: flex-end; padding-bottom: 15vh; }
 .hero-title {
   font-family: var(--display);
-  font-size: clamp(64px, 15.5vw, 230px);
+  /* Cabinet Grotesk only has one real weight file loaded (500) — as an <h1>, this defaults to the
+     browser's own heading bold (700), which the font can't actually supply, so it was rendering
+     synthetic/faux bold instead of the font's true medium weight (see .finale-title's own longer
+     version of this same note). Pinned to 500 to match. */
+  font-weight: 500;
+  /* Shrunk from clamp(64px,15.5vw,230px) per explicit feedback ("make the text smaller") on the
+     opening "SEAL POINT" reveal. */
+  font-size: clamp(46px, 11vw, 160px);
   line-height: .92;
   color: #fff;
   text-transform: uppercase;
@@ -186,7 +269,12 @@ a { color: var(--gold); text-decoration: none; }
   width: 100%;
   height: 148vh;                 /* shortened slightly; still tall enough the diagonal edges sit off-screen when covered — .pf-inner stays centred so text/ice don't move */
   flex-shrink: 0;                /* don't let the flex column collapse it */
-  background: #0a0c10;           /* solid section */
+  /* light grayish blue, soft radial wash rather than a flat fill — brightest near the
+     top, easing into a slightly deeper (still light) blue-gray toward the lower edges
+     so it reads as smooth, airy mist behind the aurora + icy white block rather than a
+     hard-edged tint. Shared with .pf-detail (--ice-bg) so opening a project continues the
+     same backdrop instead of cutting to black. */
+  background: var(--ice-bg);
   /* exact 6° diagonal, right side taller: 10.51vw rise over the full width = atan(0.1051) = 6° */
   clip-path: polygon(0 10.51vw, 100% 0, 100% calc(100% - 10.51vw), 0 100%);
   display: flex;
@@ -222,6 +310,7 @@ a { color: var(--gold); text-decoration: none; }
 .pf-head { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .pf-title {
   font-family: var(--display);
+  font-weight: 500; /* real loaded weight — avoids synthetic bold on this <h2> (see .hero-title's own note) */
   font-size: clamp(28px, 3.4vw, 52px);
   text-transform: uppercase;
   color: #fff;
@@ -253,8 +342,32 @@ a { color: var(--gold); text-decoration: none; }
   touch-action: pan-y;      /* vertical scroll passes through; taps drive the raycast */
   cursor: pointer;
 }
+/* click-to-open "swoop" transition (ice.js): ramps to full opacity only over the final
+   approach of the camera dolly, so arriving at the block's surface reads as being swallowed
+   by its own light rather than the camera clipping into the geometry. Appended straight to
+   <body> by ice.js (NOT into .pf-stage) and `position: fixed` here — .pf-stage sits inside
+   .portfolio-box, which has `will-change: transform`, and that creates a containing block for
+   any fixed-position descendant, so nesting the flash in there capped it at .pf-stage's own
+   partial-height box no matter what this rule said, reading as a hard-edged white band/rectangle
+   instead of an actual full-screen whiteout. A circle-vs-ellipse gradient-shape fix alone was not
+   enough for exactly that reason — the *container* was the bug, not just the gradient math. */
+.pf-zoom-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 70;                 /* above topbar(50)/seal-progress(60)/stage(20), below #pf-details(90)
+                                   so the detail panel still visibly fades in *over* this once it opens */
+  /* `ellipse` (not `circle`): a circular gradient's falloff radius is set by the *farthest
+     corner*, which on a wide/short box would be dominated by width and read flat vertically;
+     ellipse scales independently per axis. Stops run all the way to a fully opaque, near-white
+     final color (not transparent) — the *end* state of this ramp is deliberately a genuine
+     full-screen whiteout (see comment above), so the outer edge must stay opaque, unlike a
+     typical soft-vignette glow that fades to nothing. */
+  background: radial-gradient(ellipse at 50% 50%, #ffffff 0%, #e7f4fc 45%, #cfe6f4 100%);
+  opacity: 0;
+  pointer-events: none;
+}
 
-/* ---- igloo-style HUD annotations over the ice ---- */
+/* ---- HUD: viewfinder brackets + specimen tag + click-to-explore cue ---- */
 .pf-hud {
   position: absolute;
   top: 0; bottom: 0;
@@ -269,59 +382,122 @@ a { color: var(--gold); text-decoration: none; }
   text-transform: uppercase;
   transition: opacity .2s ease;
 }
-.pf-hud-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-.pf-hud-lines .pf-ln polyline { stroke: rgba(200, 225, 245, .5); stroke-width: 1; vector-effect: non-scaling-stroke; }
-.pf-hud-lines .pf-constellation polyline { stroke: rgba(170, 205, 235, .18); stroke-width: 1; vector-effect: non-scaling-stroke; }
-.pf-hud-lines .pf-nodes circle { fill: rgba(214, 236, 252, .7); }
-.pf-hud-callout { position: absolute; left: 4%; top: 7%; display: flex; flex-direction: column; gap: 3px; line-height: 1.15; }
+.pf-hud-bracket {
+  position: absolute;
+  width: clamp(16px, 2.2vw, 26px);
+  height: clamp(16px, 2.2vw, 26px);
+  border: 1.5px solid rgba(120, 224, 210, .4);
+}
+.pf-hud-bracket-tl { top: 4%; left: 2%; border-right: 0; border-bottom: 0; }
+.pf-hud-bracket-tr { top: 4%; right: 2%; border-left: 0; border-bottom: 0; }
+.pf-hud-bracket-bl { bottom: 7%; left: 2%; border-right: 0; border-top: 0; }
+.pf-hud-bracket-br { bottom: 7%; right: 2%; border-left: 0; border-top: 0; }
+.pf-hud-callout {
+  position: absolute; left: 4%; top: 8%;
+  display: flex; flex-direction: column; gap: 4px; line-height: 1.15;
+  padding-left: 12px;
+  border-left: 1px solid rgba(120, 224, 210, .38);
+}
 .pf-hud-code { color: rgba(232, 244, 255, .95); font-weight: 700; }
 .pf-hud-kind { color: rgba(180, 205, 228, .7); letter-spacing: .16em; font-size: .86em; }
-.pf-hud-temp { position: absolute; right: 6%; top: 27%; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-.pf-hud-lbl { color: rgba(180, 205, 228, .7); letter-spacing: .2em; }
-.pf-hud-t1, .pf-hud-t2 { color: rgba(232, 244, 255, .92); font-variant-numeric: tabular-nums; }
+.pf-hud-date { color: rgba(180, 205, 228, .5); font-size: .82em; }
 .pf-hud-explore {
-  position: absolute; right: 5%; bottom: 8%;
+  position: absolute; left: 50%; bottom: 7%;
+  transform: translateX(-50%);
   pointer-events: auto;
-  display: flex; flex-direction: column; align-items: flex-end; gap: 3px;
-  background: none; border: 0; padding: 6px;
-  font: inherit; letter-spacing: .12em; text-transform: uppercase;
-  color: rgba(226, 238, 250, .82); cursor: pointer;
-  transition: color .25s ease;
+  display: flex; align-items: center; gap: 10px;
+  /* Was transparent-background plain text at the HUD's own tiny base size (9-12px) — legible
+     against a plain dark backdrop, but this sits over the same busy, colorful film clip as the
+     rest of the HUD (gold emblems, bright aurora bands), which can wash out thin text with no
+     backing of its own. A soft pill (dark glass + a thin gold-tinted border, matching this site's
+     existing button language elsewhere — see "Start a project") guarantees contrast regardless of
+     whatever's playing behind it, on top of also just being bigger and bolder than the surrounding
+     read-only labels, since this is the one clickable thing in the HUD. */
+  background: rgba(6, 6, 7, .55);
+  border: 1px solid rgba(212, 162, 76, .4);
+  border-radius: 999px;
+  padding: 9px 20px 9px 14px;
+  font: inherit; font-size: 1.35em; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(240, 248, 255, .96); cursor: pointer;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, .5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: color .25s ease, background .25s ease, border-color .25s ease;
 }
-.pf-hud-explore:hover { color: var(--gold); }
-.pf-hud-date { color: rgba(180, 205, 228, .68); }
+.pf-hud-explore:hover {
+  color: var(--gold);
+  background: rgba(6, 6, 7, .72);
+  border-color: var(--gold);
+}
+.pf-hud-explore:hover .pf-hud-ring { border-color: var(--gold); }
+.pf-hud-ring {
+  position: relative;
+  width: 8px; height: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(226, 238, 250, .75);
+  flex-shrink: 0;
+  transition: border-color .25s ease;
+}
+.pf-hud-ring::before {
+  content: '';
+  position: absolute; inset: -6px;
+  border-radius: 999px;
+  border: 1px solid rgba(120, 224, 210, .55);
+  animation: pf-ring-pulse 2.6s ease-out infinite;
+}
+@keyframes pf-ring-pulse {
+  0% { transform: scale(.55); opacity: .85; }
+  75%, 100% { transform: scale(1.8); opacity: 0; }
+}
 .pf-hud-cta { color: rgba(240, 248, 255, .96); font-weight: 700; }
-.pf-hud-cross { position: absolute; color: rgba(190, 215, 238, .5); font-size: .9em; }
-.pf-x1 { left: 16%; top: 62%; }
-.pf-x2 { left: 60%; top: 20%; }
-.pf-x3 { right: 20%; bottom: 30%; }
 @media (max-width: 760px) {
-  .pf-hud-kind, .pf-hud-temp, .pf-hud-cross { display: none; }   /* keep it uncluttered on small screens */
+  .pf-hud-kind, .pf-hud-date, .pf-hud-bracket { display: none; }   /* keep it uncluttered on small screens */
+  /* .pf-hud-explore has no explicit width (sizes to its own "CLICK TO EXPLORE" content) and is
+     centered via left:50%+translateX(-50%) — an absolutely-positioned box with no explicit width
+     computes shrink-to-fit sizing from `left` to the containing block's far edge, i.e. HALF the
+     .pf-hud's real width here, not the full width the transform visually centers it within. At
+     narrow viewports that halved "available width" is less than the text's own natural width, so it
+     wraps to 2 lines ("CLICK TO / EXPLORE") even though there's plainly enough real room either side
+     post-transform. white-space:nowrap sidesteps the miscalculation entirely (forces min-content to
+     equal max-content, which collapses shrink-to-fit to just the natural single-line width,
+     independent of the halved available-width figure) rather than working around the symptom. */
+  .pf-hud-explore { white-space: nowrap; }
 }
+/* ---- caption: the section's single title moment (was previously duplicated by a curved
+   title over the ice — removed; this is now the only place a project's name appears) ---- */
 .pf-caption {
   display: flex;
   align-items: center;
-  gap: clamp(16px, 2.2vw, 34px);
-  padding-top: clamp(12px, 2vh, 26px);
-  transition: opacity .2s ease;
+  gap: clamp(20px, 2.6vw, 40px);
+  padding-top: clamp(28px, 5vh, 56px);   /* generous separation from the visual above — let the name breathe */
+  transition: opacity .3s ease, transform .3s ease;
 }
 .pf-cap-tag {
   font-family: var(--display);
-  font-size: clamp(20px, 2vw, 32px);
+  font-weight: 500;
+  font-size: clamp(18px, 1.7vw, 26px);
   color: var(--gold);
-  letter-spacing: .06em;
+  letter-spacing: .08em;
   flex-shrink: 0;
 }
-.pf-cap-text { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+.pf-cap-rule {
+  width: 1px;
+  align-self: stretch;
+  min-height: 48px;
+  background: linear-gradient(rgba(212, 162, 76, 0), rgba(212, 162, 76, .55), rgba(212, 162, 76, 0));
+  flex-shrink: 0;
+}
+.pf-cap-text { display: flex; flex-direction: column; gap: 12px; flex: 1; min-width: 0; }
 .pf-cap-title {
   font-family: var(--display);
-  font-size: clamp(24px, 2.7vw, 46px);
+  font-weight: 500; /* real loaded weight — avoids synthetic bold on this <h3> */
+  font-size: clamp(32px, 3.9vw, 68px);
   line-height: 1;
   text-transform: uppercase;
   color: #fff;
-  letter-spacing: .02em;
+  letter-spacing: .01em;
 }
-.pf-cap-pitch { font-size: clamp(14px, 1.15vw, 18px); line-height: 1.4; color: var(--fog); }
+.pf-cap-pitch { font-size: clamp(14px, 1.2vw, 19px); line-height: 1.5; color: var(--fog); max-width: 46ch; }
 .pf-cap-link {
   flex-shrink: 0;
   font-family: var(--body);
@@ -337,20 +513,83 @@ a { color: var(--gold); text-decoration: none; }
 .pf-cap-link:hover { background: var(--gold); color: var(--void); border-color: var(--gold); }
 
 @media (max-width: 760px) {
-  .pf-caption { flex-wrap: wrap; }
+  .pf-caption { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .pf-cap-rule { display: none; }
+  .pf-cap-link { align-self: flex-start; }
 }
 
 /* ---------- project detail overlays ---------- */
 #pf-details { position: fixed; inset: 0; z-index: 90; pointer-events: none; }
 .pf-detail {
   position: absolute; inset: 0;
-  background: var(--void);
+  background: var(--ice-bg);
   opacity: 0; visibility: hidden;
   pointer-events: none;
   transition: opacity .5s ease, visibility .5s;
 }
 .pf-detail.is-open { opacity: 1; visibility: visible; pointer-events: auto; }
-.pf-detail-scroll { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; }
+/* Backdrop, sitting between the panel's own --ice-bg and its real content. Went through two earlier
+   passes (turbulence-displaced CSS blobs, then a Canvas2D "light-node network") before landing here:
+   a vanilla-CSS port of the "Aurora Background" effect the user referenced (repeating-linear-gradient
+   stripes, blurred and animated via background-position, masked to a soft radial fade) — this project
+   has no React/Tailwind/shadcn, so the *technique* is reproduced directly in plain CSS custom
+   properties + keyframes rather than pulling in that stack for one effect. Pure CSS, no JS/canvas at
+   all: two stacked pseudo-elements on `.pf-detail-atmos` itself carry the whole thing.
+   Deliberately a third distinct rendering family from the portfolio section's own aurora.js (WebGL
+   noise-shader bands) — same visual family (repeating stripes+blur), different tech, and re-tuned to
+   this panel's *light* --ice-bg (soft pastel stripes on a radial white mask) rather than the
+   reference's dark zinc-900 demo backdrop. `--pf-atmos-accent` was originally overridden per project
+   (gold vs. ember, matching the old node-network version's per-client differentiation) — dropped in
+   favor of one consistent light teal across all three panels per explicit request. */
+.pf-detail-atmos {
+  position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0;
+  /* Light teal per explicit request (was gold/ember, differentiated per client — dropped that
+     differentiation in favor of one consistent color across all three panels, matching the ask). */
+  --pf-atmos-accent: #5FD6C8;
+  background: var(--ice-bg);
+}
+.pf-detail-atmos::before,
+.pf-detail-atmos::after {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  /* Directly visible pastel stripes at normal blend — the reference's own white-stripe layer +
+     `mix-blend-mode: difference` + `invert` combination exists there to make one gradient work in
+     both light and dark mode; this panel is always light, so that indirection was actively
+     cancelling itself out (multiplying by white is a no-op) instead of adding anything. Simpler and
+     actually visible: one repeating gradient, real opacity, no blend-mode fighting it.
+     The accent sits on a held plateau (two stops at the same color) rather than a single instantaneous
+     stop — a hairline stop gets blurred straight back down to near-white by the 30px blur below and
+     read as barely-there in practice; a wide held band survives the blur as actual visible color. */
+  background-image: repeating-linear-gradient(100deg,
+    #ffffff 0%, #eaf3f8 6%, var(--pf-atmos-accent) 16%, var(--pf-atmos-accent) 30%, #eaf3f8 40%, #9ab2c4 48%, #ffffff 58%);
+  background-size: 200% 200%;
+  background-position: 50% 50%;
+  filter: blur(22px);
+  opacity: .8;
+  /* Fades the stripes out toward the panel's own edges (the reference's own
+     `mask-image: radial-gradient(...)` trick) rather than letting them run hard into the border —
+     keeps the sweep concentrated and away from the text-heavy edges of the panel. */
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 20%, transparent 75%);
+  animation: pf-atmos-sweep 70s linear infinite;
+  will-change: background-position;
+}
+.pf-detail-atmos::after {
+  animation-duration: 95s;
+  animation-direction: reverse;
+  opacity: .5;
+  filter: blur(36px);
+  background-position: 20% 60%;
+}
+@keyframes pf-atmos-sweep {
+  from { background-position: 50% 50%, 50% 50%; }
+  to { background-position: 350% 50%, 350% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pf-detail-atmos::before, .pf-detail-atmos::after { animation: none; }
+}
+.pf-detail-scroll { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; z-index: 1; }
 .pf-detail-close {
   position: fixed; top: 24px; right: clamp(20px, 4vw, 56px);
   width: 52px; height: 52px; border-radius: 999px;
@@ -370,17 +609,183 @@ a { color: var(--gold); text-decoration: none; }
 .pf-detail-kicker { font-size: 13px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); }
 .pf-detail-title {
   font-family: var(--display);
+  font-weight: 500; /* real loaded weight — avoids synthetic bold on this <h2> */
   font-size: clamp(44px, 8vw, 118px); line-height: .95;
-  text-transform: uppercase; color: #fff;
+  text-transform: uppercase; color: var(--ink);
   margin: 16px 0 12px; letter-spacing: .01em;
 }
-.pf-detail-lede { font-size: clamp(18px, 2vw, 28px); line-height: 1.35; color: var(--fog); max-width: 26ch; }
-.pf-detail-hero {
-  height: clamp(280px, 46vh, 560px);
-  border-radius: 16px; border: 1px solid var(--structure);
-  margin: clamp(32px, 5vh, 64px) 0;
-  background: linear-gradient(145deg, #202634 0%, #3a4048 100%);
+.pf-detail-lede { font-size: clamp(18px, 2vw, 28px); line-height: 1.35; color: var(--ink-soft); max-width: 26ch; }
+/* "encased in ice": the header video and the two gallery shots below each are rendered as a
+   real 3D pane of ice (WebGL, site/js/ice.js — a thin, clear, glass-like sheet, not the chunky
+   frosted blocks used for the portfolio cards) with the video/photo sitting *inside* it,
+   visible through the ice's own transmission rather than stacked on top of it. These containers
+   just host + size the <canvas> the scene renders into; all the actual "ice" work happens in JS. */
+.pf-detail-hero,
+.pf-detail-shot {
+  position: relative;
+  /* No CSS border here on purpose: the gold frame is rendered *inside* the WebGL scene itself
+     (site/js/ice.js, setupSlabCanvas's `borderGroup`) so it shares the content plane's own camera
+     projection and tilts/perspective-shifts together with the image under the cursor-lean effect —
+     a flat DOM border can't track that and previously had to sit with a large margin outside the
+     content just to guarantee it never crossed a tilted edge. */
 }
+.pf-dhero-canvas,
+.pf-shot-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+}
+.pf-detail-hero {
+  /* Real root cause of "you made it tiny", part 1: this box's height used to be set independently
+     of its (column-driven, fluid) width via a vh-clamp — its own on-page aspect ratio ended up
+     nowhere near the ice geometry's aspect (built to match the *video's* native 16:9, specifically
+     so the video itself is never stretched — see buildSlabGeometry/setupSlabCanvas in ice.js).
+     Whenever a box's shape doesn't match the object being fit into it, a camera has to widen its FOV
+     to cover the *wider* of the two dimensions, leaving large unused empty margin on the *other*
+     axis. `aspect-ratio` here makes the CSS box's own shape match the content's shape directly, so
+     there's no mismatch left to letterbox.
+     Part 2, a real (not a bug) fill-ratio ceiling, worth knowing before touching this again: even
+     with matching aspects and the adaptive tight-fit FOV (computeSlabFov in ice.js), the ice pane's
+     OWN fill ratio inside this box is capped by how far it can tilt — the fit-check has to cover the
+     box's *worst-case tilted silhouette* (SLAB_TILT, SLAB_DEPTH_RATIO — see ice.js), which is bigger
+     than its resting silhouette. That required margin is real geometry, not arbitrary padding —
+     shrinking SLAB_TILT (done in a later round, ~29°→~14.6°, per "moving wayyy too much... a much
+     lazier approach" — a happy coincidence that the same fix requested for motion feel also raised
+     the fill ratio from ~62%→~77%) directly raises the ceiling; the box's own pixel footprint (this
+     max-height) is the *other*, independent lever — more pixels devoted to a pane that's now filling
+     more of them too, compounding both fixes. */
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  max-height: 900px;
+  /* Bottom margin trimmed down from the old symmetric clamp(40px,6vh,76px) — .pf-detail-explore now
+     sits directly below and supplies its own margin-bottom for the (larger) gap down to
+     .pf-detail-cols, so this only needs to cover "right under the hero," not the whole gap. */
+  margin: clamp(40px, 6vh, 76px) 0 clamp(14px, 2vh, 20px);
+}
+.pf-dhero-video {
+  /* kept in the DOM purely as a decode source for the canvas's THREE.VideoTexture above — never
+     shown directly (display:none risks some browsers pausing frame decode; an offscreen 2x2 box
+     avoids that while still being fully inert). */
+  position: absolute;
+  width: 2px; height: 2px;
+  opacity: 0;
+  pointer-events: none;
+}
+.pf-dhero-text {
+  /* Never actually rendered as a DOM overlay — its content/typography (real computed
+     color/font/size/spacing, read by ice.js's extractDheroTextData) is drawn straight into the
+     3D scene instead, on its own plane behind the ice, alongside the video. This block stays in
+     the DOM purely as that data source (and keeps `padding` as the one layout value read off it),
+     kept hidden since a duplicate flat copy would otherwise sit on top of the canvas. */
+  display: none;
+  padding: clamp(20px, 3.5vw, 42px);
+}
+.pf-dhero-pre {
+  font-family: var(--body);
+  font-size: 11px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.pf-dhero-title {
+  font-family: var(--display);
+  font-weight: 500; /* real loaded weight — avoids synthetic bold on this <h3> (the drafting/realty
+     variants below use their own different fonts with their own already-correct explicit weights,
+     unrelated to this) */
+  font-size: clamp(22px, 2.7vw, 40px);
+  line-height: 1.08;
+  color: #fff;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.pf-dhero-sub {
+  font-size: clamp(12px, 1vw, 15px);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, .75);
+  max-width: 42ch;
+}
+/* Per-client overrides — each brand's own real hero typography/color, pulled from their
+   live site, instead of the Seal Point gold/Cabinet Grotesk system used everywhere else. */
+.pf-dhero-text--builders .pf-dhero-pre,
+.pf-dhero-text--drafting .pf-dhero-pre {
+  color: #F5F0E8; opacity: .75;
+}
+.pf-dhero-text--builders .pf-dhero-title,
+.pf-dhero-text--drafting .pf-dhero-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 300;
+  text-transform: none;
+  letter-spacing: .01em;
+  color: #F5F0E8;
+}
+.pf-dhero-text--builders .pf-dhero-sub,
+.pf-dhero-text--drafting .pf-dhero-sub {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(13px, 1.1vw, 17px);
+  color: #F5F0E8; opacity: .85;
+}
+.pf-dhero-text--realty .pf-dhero-pre { color: #C2703D; opacity: .8; }
+.pf-dhero-text--realty .pf-dhero-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: .01em;
+  color: #EDE2CC;
+}
+.pf-dhero-text--realty .pf-dhero-sub {
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(13px, 1.1vw, 17px);
+  color: #EDE2CC; opacity: .85;
+}
+/* Sits right under the hero ice slab, echoing the same "Click to explore" HUD language used on the
+   portfolio carousel (.pf-hud-explore) — but that one's a dark pill built for sitting over busy film
+   footage, while this panel's own background is the light --ice-bg gradient, so it's restyled here for
+   that context (gold-ghost, matching .btn-ghost's own on --ice-bg-proven fill-on-hover treatment —
+   see the "Visit site" button lower in this same panel) rather than reused directly. A plain external
+   <a> to the project's own real site (same href as "Visit site" below it, same target="_blank" —
+   two ways to reach the same destination from this panel, not two different behaviors) — no JS
+   involved, unlike its first version, which scrolled to .pf-detail-cols instead. Redesigned from a
+   plain pulsing-dot + bare text (read as too thin/flat for a clickable affordance) into an actual pill
+   button with a bobbing chevron — doubles as a directional "there's more" cue, doing double duty a
+   static ring couldn't. */
+.pf-detail-explore {
+  /* Must stay block-level (not inline-flex) — margin:auto horizontal centering below only applies to
+     block-level boxes; inline-level ones resolve auto margins to 0, which silently left-aligned this
+     against .pf-detail-inner's own flex-column layout instead of centering it. */
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  width: fit-content; margin: 0 auto clamp(30px, 5vh, 56px);
+  font: inherit; font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(255, 255, 255, .28);
+  border: 1px solid var(--gold-dim);
+  border-radius: 999px;
+  padding: 12px 20px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: background .3s ease, color .3s ease, border-color .3s ease, transform .3s ease, box-shadow .3s ease;
+}
+.pf-detail-explore:hover {
+  background: var(--gold);
+  color: var(--void);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(212, 162, 76, .32);
+}
+.pf-detail-explore-icon {
+  width: 13px; height: 13px;
+  flex-shrink: 0;
+  animation: pf-explore-bob 1.8s ease-in-out infinite;
+}
+@keyframes pf-explore-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pf-detail-explore-icon { animation: none; }
+}
+
 .pf-detail-cols {
   display: grid; grid-template-columns: .8fr 1.2fr;
   gap: clamp(24px, 4vw, 64px);
@@ -388,26 +793,76 @@ a { color: var(--gold); text-decoration: none; }
 }
 .pf-detail-meta { display: flex; flex-direction: column; gap: 20px; }
 .pf-detail-meta > div span { display: block; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
-.pf-detail-meta > div p { font-size: 16px; color: #fff; }
-.pf-detail-copy p { font-size: clamp(15px, 1.2vw, 18px); line-height: 1.7; color: var(--fog); margin-bottom: 16px; }
+.pf-detail-meta > div p { font-size: 16px; color: var(--ink); }
+.pf-detail-copy p { font-size: clamp(15px, 1.2vw, 18px); line-height: 1.7; color: var(--ink-soft); margin-bottom: 16px; }
 .pf-detail-gallery {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: clamp(16px, 2vw, 26px);
   margin-bottom: clamp(34px, 5.5vh, 64px);
 }
 .pf-detail-shot {
-  height: clamp(200px, 34vh, 420px);
-  border-radius: 14px; border: 1px solid var(--structure);
-  background: linear-gradient(145deg, #1b2a2e 0%, #34454a 100%);
+  /* This 16:9 is only a pre-JS/no-JS fallback now. The 6 real gallery photos (client site
+     screenshots, ffprobe-measured) each have their own aspect, from ~1.02:1 to ~1.49:1 — nothing
+     close to 16:9 — so site/js/ice.js's setupSlabCanvas() sets a per-instance inline
+     `aspect-ratio` on this element the moment it runs, from the exact same aspect value
+     SLAB_SHOT_IMAGES feeds into the 3D geometry. Keeping this box's shape in sync with the real
+     content, not a guessed shared ratio, is what avoids "small image, huge empty margin inside
+     the border" — same aspect-ratio-match principle as .pf-detail-hero above, just per-instance
+     now instead of one shared value. */
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  max-height: 600px;
+}
+.pf-detail-quote {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(18px, 3vw, 32px);
+  padding: clamp(28px, 4.5vh, 46px) 0;
+  margin: 0 0 clamp(34px, 5.5vh, 64px);
+  border-top: 1px solid var(--structure);
+  border-bottom: 1px solid var(--structure);
+}
+.pf-detail-quote::before {
+  content: '\201C';
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(56px, 6.5vw, 92px);
+  line-height: .6;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.pf-detail-quote-body { flex: 1; min-width: 0; }
+.pf-detail-stars {
+  color: var(--gold);
+  font-size: 16px;
+  letter-spacing: .18em;
+  margin-bottom: 12px;
+}
+.pf-detail-quote p {
+  font-family: var(--body);
+  font-style: italic;
+  font-size: clamp(16px, 1.5vw, 21px);
+  line-height: 1.55;
+  color: var(--ink);
+  max-width: 62ch;
 }
 @media (max-width: 760px) {
   .pf-detail-cols, .pf-detail-gallery { grid-template-columns: 1fr; }
+  .pf-detail-quote::before { font-size: 44px; }
+  /* .pf-detail-cols going to 1 column (above) means copy text now runs the panel's full width,
+     including the exact top-right corner the fixed close button always occupies — on desktop's
+     2-column layout the copy text never reaches that far right, so this never comes up there. At
+     .55 opacity words were legible-but-garbled scrolling underneath it (looks like a rendering
+     glitch, not an intentional layered UI element); pushed near-opaque here so anything that passes
+     under it just reads as a clean solid button sitting on top, same as any fixed mobile FAB. */
+  .pf-detail-close { background: rgba(6, 6, 7, .94); }
 }
 
 /* ---------- strip ---------- */
 #strip { align-items: flex-start; gap: 1.5vh; }
 .strip-line {
   font-family: var(--display);
+  font-weight: 500;
   font-size: clamp(44px, 7.6vw, 118px);
   line-height: 1.02;
   text-transform: uppercase;
@@ -419,99 +874,286 @@ a { color: var(--gold); text-decoration: none; }
 /* ---------- shared section head ---------- */
 .section-head {
   font-family: var(--display);
+  font-weight: 500; /* real loaded weight — avoids synthetic bold on this <h2> */
   font-size: clamp(34px, 4.6vw, 72px);
   text-transform: uppercase;
   color: #fff;
   letter-spacing: .02em;
-  margin-bottom: 5vh;
+  /* Trimmed from 5vh — helps offset .wwd-header's new top clearance (see #what-we-do above) so the
+     grid below doesn't just inherit the same amount of extra height and start overflowing instead. */
+  margin-bottom: 3vh;
   text-shadow: 0 4px 44px rgba(6,6,7,.6);
+  /* .wwd-header (its only container) is already centered on the page via #what-we-do > *'s own
+     margin-inline:auto, but the title text itself was still left-aligned within that box — reading
+     as off-center relative to everything else in the box despite the box itself being centered. */
+  text-align: center;
 }
 
-/* ---------- pillars ---------- */
-#pillars {
-  background: linear-gradient(100deg, rgba(6,6,7,.78) 0%, rgba(6,6,7,.45) 42%, transparent 68%);
+/* ---------- what we do ---------- */
+/* Replaces the old "Three pillars" list. Same idea (design / development / motion) but each item
+   is now a small live *demonstration* of the capability rather than just an icon + label — show,
+   don't tell, given this whole page is itself the portfolio for these exact techniques. A 4th tile
+   (Dimension) was added specifically to represent the 3D/WebGL work that's this site's own biggest
+   technical showcase but wasn't one of the original three pillars. Three of the four demos
+   (Design/Development/Motion) are deliberately pure CSS — no JS, no extra animation frames — only
+   Dimension needs a real WebGL canvas (site/js/wwd.js, lazy-loaded the same way ice.js/aurora.js
+   are), keeping this section's cost low relative to how much visual interest it adds. */
+/* No section-wide wash — reverted after feedback that darkening the *entire screen* was wrong; the
+   film clip footage should stay readable behind this section same as it does everywhere else on the
+   page. Only individual card content needs to be legible over that busy moving background, so the
+   opacity/backing lives on `.wwd-tile` itself now (below), not on the section as a whole. */
+#what-we-do > * { max-width: 1120px; margin-inline: auto; }
+/* `.panel`'s shared justify-content:center (centering this section's whole header+grid stack
+   vertically) was landing the header box's top edge just ~3px below the viewport's own top edge at a
+   typical 900px-tall viewport — meaning the fixed #topbar (90px tall, no background of its own,
+   painted on top of everything beneath it) was overlapping roughly the top half of the "WHAT WE DO"
+   title itself, not just brushing the box's decorative top corner. Anchoring to the top with real
+   clearance here (rather than nudging padding *inside* the box, which wouldn't move the box itself)
+   fixes that directly. Mirrors the same top-anchor approach already used for narrow viewports (see the
+   max-width:900px block below) — that block's own values still win at ≤900px widths unchanged, this
+   only takes effect above that, where centering had never previously been a problem worth revisiting
+   until the topbar-overlap was found. The vertical spacing trims on .wwd-header/.section-head below
+   claw back roughly the same amount of height this adds, so the grid's own bottom edge doesn't just
+   shift an equivalent amount further down and start clipping there instead. */
+/* Flat pixel value, deliberately not vh-based — #topbar's own height (90px) is a fixed pixel amount,
+   not viewport-relative, so a vh-derived clearance can (and, caught here, did) shrink below it on
+   shorter-but-not-narrow viewports (e.g. 900px-wide laptops well under 900px tall), reopening the
+   exact clipping bug this was meant to fix. 100px = 90px topbar + a flat 10px buffer, safe at any
+   viewport height. */
+/* padding-bottom raised from 24px — headless testing sets window.innerHeight to the exact requested
+   viewport height, but a real browser at a similarly-tall *window* has meaningfully less usable height
+   than that once its own chrome (tabs, address bar, bookmarks bar) is subtracted, so a value tuned to
+   ~0px slack in headless testing can still clip real cards in a real browser. This trades tuning for a
+   real, deliberate cushion instead of chasing an exact-fit number that only holds in a chrome-less
+   test environment. */
+#what-we-do { justify-content: flex-start; padding-top: 100px; padding-bottom: 56px; }
+/* Back to ONE shared box for heading+lede (was briefly split into two separate boxes — reverted:
+   with both as independent boxes the combined stack, plus the 2x2 card grid below, no longer fit
+   together on screen at once). This time the box itself starts sized to fit *only* the title, then
+   smoothly grows to also fit the lede once it's due to appear — see the lede's own `max-height`/
+   `margin-top` GSAP tween further down this file (`tl.fromTo('.wwd-lede', ...)`) for the actual
+   growth mechanism; this box has no fixed height of its own, so it just naturally follows its
+   content's real flow height as that tween plays. `overflow: hidden` keeps the box's own rounded
+   corners clean while the lede is mid-grow, on top of the lede's own overflow:hidden already
+   preventing its text from escaping past its current max-height. */
+.wwd-header {
+  background: rgba(6, 6, 7, .82);
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  /* Vertical padding trimmed from the old clamp(24px,3.2vw,42px) (kept as-is horizontally) to help
+     offset the new top clearance added to #what-we-do above — without this, pushing the whole section
+     down would just push the grid's own bottom edge down by the same amount and start clipping there
+     instead of fixing anything. */
+  padding: clamp(18px, 2.4vw, 30px) clamp(24px, 3.2vw, 42px);
+  /* Trimmed from clamp(28px,4.5vh,48px) — reclaims a bit more of the height the flex-shrink fix below
+     restored to this box, which the grid's own bottom edge needs back (see #what-we-do's own comment
+     for the full top-clearance story this is all offsetting). */
+  margin-bottom: clamp(20px, 3vh, 32px);
+  overflow: hidden;
+  /* Load-bearing, not decorative — see the mobile-only version of this same comment further down this
+     file for the full flexbox explanation (short version: overflow:hidden on a flex item opts it out
+     of the "never shrink below content" protection flex items get by default, so under any space
+     pressure in #what-we-do's column layout the browser is free to crush this box smaller than its
+     title+lede actually need, clipping the lede even though its own max-height/opacity are already
+     fully "grown"). Previously only set inside the max-width:900px block since desktop had enough
+     slack that the bug stayed latent there — moved to apply unconditionally after the new top-anchor
+     padding above put desktop under the same kind of pressure and the exact same symptom reappeared. */
+  flex-shrink: 0;
 }
-#pillars > * { max-width: 720px; }
-.pillar {
+.wwd-lede {
+  max-width: 62ch;
+  font-size: clamp(15px, 1.3vw, 18px);
+  line-height: 1.65;
+  /* Brightened from var(--fog) (#9CA3A8, a fairly muted mid-gray) — still noticeably low-contrast
+     even against this near-black opaque box, per explicit feedback to make it easier to read. */
+  color: #d7dce0;
+  /* Base "collapsed" state — GSAP's own .fromTo() sets these explicitly too on creation, but stated
+     here as well so the very first paint (before the timeline's first tick) already matches, not
+     just after JS runs. */
+  max-height: 0;
+  margin-top: 0;
+  overflow: hidden;
+}
+.wwd-grid {
   display: grid;
-  grid-template-columns: 56px 1fr;
-  grid-template-rows: auto auto;
-  column-gap: 22px;
-  padding: 22px 0;
-  border-top: 1px solid var(--structure);
-  opacity: 0;
-  will-change: transform, opacity;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Trimmed from clamp(16px,2vw,28px) — another small piece of the same reclaimed-height budget as
+     .wwd-header's margin-bottom above. */
+  gap: clamp(12px, 1.6vw, 20px);
 }
-.pillar-icon {
-  grid-row: 1 / 3;
-  width: 48px; height: 48px;
-  color: var(--gold);
-  filter: drop-shadow(0 0 10px rgba(212,162,76,.25));
-}
-.pillar h3 {
-  font-family: var(--display);
-  font-size: clamp(24px, 2.6vw, 40px);
-  text-transform: uppercase;
-  color: #fff; letter-spacing: .03em;
-}
-.pillar p { max-width: 46ch; font-size: 15px; line-height: 1.6; color: var(--fog); }
-
-/* ---------- work ---------- */
-#work { justify-content: center; }
-.cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(14px, 2vw, 28px);
-}
-.card {
-  position: relative;
-  display: block;
-  background: rgba(38, 24, 19, .58);
-  border: 1px solid rgba(212, 162, 76, .14);
-  border-radius: 8px;
-  padding: clamp(20px, 2.4vw, 34px);
+.wwd-tile {
+  /* Own opaque backing, not the section's — the section itself went back to transparent above so
+     the film footage stays visible around the cards; each card carries its own legibility instead
+     of borrowing it from a full-screen wash. */
+  /* Trimmed from clamp(20px,2.4vw,30px) — part of the height budget reclaimed for a real bottom
+     safety margin (see #what-we-do's own padding-bottom comment). */
+  padding: clamp(16px, 2vw, 24px);
+  border-radius: 16px;
+  background: rgba(6, 6, 7, .82);
+  border: 1px solid rgba(255, 255, 255, .08);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .4);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   opacity: 0;
-  transform: translateY(40px);
   will-change: transform, opacity;
-  transition: background .35s;
 }
-.card:hover { background: rgba(38, 24, 19, .78); }
-.card h3 {
+.wwd-tile h3 {
   font-family: var(--display);
-  font-size: clamp(20px, 1.9vw, 30px);
-  color: #fff; text-transform: uppercase; letter-spacing: .03em;
-  margin-bottom: 10px;
+  font-weight: 500; /* real loaded weight — avoids synthetic bold on this <h3> */
+  font-size: clamp(20px, 2vw, 30px);
+  text-transform: uppercase;
+  color: #fff; letter-spacing: .03em;
+  margin-top: 16px;
 }
-.card p { font-size: 14px; line-height: 1.55; color: var(--fog); margin-bottom: 26px; }
-.card-go {
-  font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
-  color: var(--gold);
-  opacity: 0; transform: translateX(-6px);
-  transition: opacity .35s, transform .35s;
-  display: inline-block;
+.wwd-tile p { max-width: 44ch; font-size: 14px; line-height: 1.6; color: var(--fog); margin-top: 6px; }
+
+/* shared demo stage — every tile's live demo sits in a fixed-height dark glass window so the 4
+   tiles line up regardless of how different their internal content is */
+.wwd-demo {
+  position: relative;
+  /* Trimmed from clamp(84px,11vh,116px), then again from clamp(76px,9.5vh,100px) — same reclaimed-
+     height budget as .wwd-header's margin-bottom/.wwd-grid's gap/.wwd-tile's padding, now also
+     funding a real bottom safety margin (see #what-we-do's own padding-bottom comment) rather than
+     just a razor-thin exact fit. */
+  height: clamp(66px, 8.2vh, 86px);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid rgba(212, 162, 76, .16);
+  overflow: hidden;
 }
-.card:hover .card-go { opacity: 1; transform: translateX(0); }
-/* gold vein border trace */
-.card-trace {
+
+/* --- Design: a rough wireframe crossfading into a polished, colored layout, on a loop --- */
+.wwd-design-layer {
   position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  overflow: visible;
+  padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 8px;
+  animation: wwd-design-cycle 7s ease-in-out infinite;
 }
-.card-trace rect {
-  width: calc(100% - 2px); height: calc(100% - 2px);
-  fill: none;
-  stroke: var(--gold);
-  stroke-width: 1.5;
-  stroke-dasharray: 1 1;         /* set via JS to path length */
-  stroke-dashoffset: 1;
+.wwd-design-layer--final { animation-delay: -3.5s; }
+.wwd-wire-line, .wwd-final-line {
+  display: block; height: 7px; border-radius: 2px;
+}
+/* Per-line widths — previously inline style="--w:X%" on each span, which under this project's own
+   strict style-src 'self' CSP (see [[deployment-security]], no 'unsafe-inline') gets silently blocked
+   on the real deployed site: these 5 lines would all render at 0 width there despite looking correct
+   in any local check that doesn't enforce the real _headers CSP. Fixed by giving each its own width
+   class instead of a JS/HTML-set custom property, same as every other styling value in this file. */
+.wwd-wire-line--1 { width: 38%; }
+.wwd-wire-line--2 { width: 70%; }
+.wwd-wire-line--3 { width: 52%; }
+.wwd-final-line--1 { width: 44%; }
+.wwd-final-line--2 { width: 64%; }
+.wwd-wire-line { background: rgba(255, 255, 255, .16); }
+.wwd-final-line:first-of-type { background: rgba(255, 255, 255, .82); }
+.wwd-final-line:last-of-type { background: rgba(255, 255, 255, .38); }
+.wwd-wire-box {
+  margin-top: auto; width: 34%; height: 20px; border-radius: 4px;
+  border: 1.5px dashed rgba(255, 255, 255, .2); background: transparent;
+}
+.wwd-final-accent { width: 30%; height: 4px; border-radius: 2px; background: var(--gold); margin-top: 2px; }
+.wwd-final-box {
+  margin-top: auto; width: 34%; height: 20px; border-radius: 4px;
+  background: var(--gold); box-shadow: 0 0 16px rgba(212,162,76,.35);
+}
+@keyframes wwd-design-cycle {
+  0%, 42% { opacity: 1; }
+  50%, 92% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* --- Development: a line of code types itself out, then "becomes" a rendered button --- */
+.wwd-code {
+  position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+  margin: 0; max-width: calc(100% - 36px);
+  font-family: var(--mono); font-size: 13px; white-space: nowrap; overflow: hidden;
+  color: rgba(255, 255, 255, .68);
+  border-right: 2px solid var(--gold);
+  width: 0;
+  animation: wwd-type 6s steps(26, end) infinite;
+}
+.wwd-tag { color: #9fd6ff; }
+.wwd-attr { color: rgba(255,255,255,.5); }
+.wwd-str { color: var(--gold); }
+.wwd-rendered-btn {
+  position: absolute; left: 18px; top: 50%; transform: translateY(-50%) scale(.9);
+  padding: 8px 20px; border-radius: 999px;
+  background: var(--gold); color: var(--void);
+  font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
   opacity: 0;
-  filter: drop-shadow(0 0 5px rgba(212,162,76,.55));
-  transition: stroke-dashoffset 1.1s cubic-bezier(.6,.05,.2,1), opacity .2s;
+  animation: wwd-btn-reveal 6s ease-in-out infinite;
 }
-.card:hover .card-trace rect { stroke-dashoffset: 0; opacity: 1; }
+@keyframes wwd-type {
+  0% { width: 0; border-right-color: var(--gold); }
+  40% { width: 100%; border-right-color: var(--gold); }
+  46%, 96% { width: 100%; border-right-color: transparent; }
+  100% { width: 0; border-right-color: var(--gold); }
+}
+@keyframes wwd-btn-reveal {
+  0%, 44% { opacity: 0; transform: translateY(-50%) scale(.9); }
+  56%, 90% { opacity: 1; transform: translateY(-50%) scale(1); }
+  100% { opacity: 0; transform: translateY(-50%) scale(.9); }
+}
+
+/* --- Motion: kinetic letters, each rising in on its own staggered loop --- */
+.wwd-demo--motion {
+  display: flex; align-items: center; justify-content: center;
+  gap: clamp(4px, .8vw, 10px);
+}
+.wwd-kchar {
+  display: inline-block;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(22px, 2.4vw, 34px);
+  color: #fff; letter-spacing: .04em;
+  animation: wwd-kchar-cycle 3.2s ease-in-out infinite;
+}
+.wwd-kchar:nth-child(1) { animation-delay: 0s; }
+.wwd-kchar:nth-child(2) { animation-delay: .1s; }
+.wwd-kchar:nth-child(3) { animation-delay: .2s; }
+.wwd-kchar:nth-child(4) { animation-delay: .3s; }
+.wwd-kchar:nth-child(5) { animation-delay: .4s; }
+.wwd-kchar:nth-child(6) { animation-delay: .5s; }
+@keyframes wwd-kchar-cycle {
+  0%, 6% { opacity: 0; transform: translateY(70%) rotate(6deg); }
+  22%, 78% { opacity: 1; transform: translateY(0) rotate(0deg); }
+  94%, 100% { opacity: 0; transform: translateY(-70%) rotate(-6deg); }
+}
+
+/* --- Dimension: real WebGL canvas, see site/js/wwd.js --- */
+.wwd-3d-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* The fake cursor wwd.js drives the mesh with, made visible as an actual cursor-arrow silhouette
+   (was a plain glowing dot+ring — read as an abstract decoration, not recognizably "a cursor").
+   `clip-path` draws the arrow shape; `::before`/`::after` stack a slightly larger dark copy behind
+   a gold one on top for a thin outline (can't stroke a clip-path's own edge directly with `border`,
+   since border follows the element's box, not the clipped shape). Positioned via left/top in JS
+   (not a CSS transition), since it needs to move in exact lockstep with the mesh's own per-frame
+   rotation, not lag behind it on an eased transition. */
+.wwd-fake-cursor {
+  position: absolute; top: 0; left: 0;
+  width: 20px; height: 26px;
+  margin: -3px 0 0 -3px;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .5)) drop-shadow(0 0 8px rgba(212, 162, 76, .6));
+}
+.wwd-fake-cursor::before,
+.wwd-fake-cursor::after {
+  content: '';
+  position: absolute;
+  clip-path: polygon(12.5% 0%, 12.5% 76%, 30% 62%, 45% 96%, 60% 90%, 46% 58%, 76% 58%);
+}
+.wwd-fake-cursor::before { inset: -1.5px; background: #060607; }
+.wwd-fake-cursor::after { inset: 0; background: var(--gold); }
+
+@media (prefers-reduced-motion: reduce) {
+  .wwd-design-layer, .wwd-code, .wwd-rendered-btn, .wwd-kchar { animation: none; }
+  .wwd-design-layer--wire { opacity: 1; }
+  .wwd-design-layer--final { opacity: 0; }
+  .wwd-code { width: 100%; border-right-color: transparent; }
+  .wwd-kchar { opacity: 1; transform: none; }
+}
 
 /* ---------- finale ---------- */
 #finale { align-items: center; text-align: center; }
@@ -522,6 +1164,13 @@ a { color: var(--gold); text-decoration: none; }
   text-transform: uppercase;
   color: #fff;
   text-shadow: 0 6px 70px rgba(6,6,7,.7);
+  /* Cabinet Grotesk only has one real weight loaded (500, see its own @font-face) — as an <h2>, this
+     got the browser's default heading bold (700) with no matching real weight, so it was rendering
+     with the browser's *synthetic* bold (faux-thickened strokes on the 500 glyphs) instead of the
+     font's true, clean medium weight — which is what .wordmark (a plain <span>, no default bold)
+     actually renders. Pinning to the real 500 weight matches that true rendering instead of the
+     synthesized fake-bold version. */
+  font-weight: 500;
 }
 .finale-ctas { display: flex; gap: 18px; margin-top: 6vh; flex-wrap: wrap; justify-content: center; }
 .btn {
@@ -551,7 +1200,7 @@ a { color: var(--gold); text-decoration: none; }
 }
 .foot-brand { display: flex; align-items: center; gap: 16px; }
 .foot-brand img { width: 44px; height: 44px; }
-.foot-brand span { font-family: var(--display); letter-spacing: .5em; font-size: 14px; color: #fff; }
+.foot-brand span { font-family: var(--display); font-weight: 500; letter-spacing: .5em; font-size: 14px; color: #fff; }
 .foot-links { display: flex; gap: 28px; flex-wrap: wrap; }
 .foot-links a {
   font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
@@ -564,8 +1213,58 @@ a { color: var(--gold); text-decoration: none; }
 
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
-  .cards { grid-template-columns: 1fr; gap: 12px; }
-  .card p { margin-bottom: 14px; }
-  #pillars { max-width: none; }
+  #what-we-do { max-width: none; }
+  .wwd-grid { grid-template-columns: 1fr; }
   #seal-progress { right: 16px; bottom: 16px; width: 44px; height: 44px; }
+
+  /* At the 1-column stack above, heading + lede + 4 full-size cards add up to real content roughly
+     twice as tall as a typical phone viewport. Every .panel (including this one) is vertically
+     *centered* (`.panel`'s own `justify-content: center`, shared by every section) — fine when
+     content is shorter than the viewport, but centering content this much taller than the viewport
+     pushes the TOP half (the heading — the one thing a visitor needs first) above row 0, entirely
+     off-screen, while the grid's own bottom overflows an equal amount below. Confirmed via
+     getBoundingClientRect(): heading top sits at -152px, grid bottom at 964px, against an 812px-tall
+     viewport — i.e. only the *middle* couple of cards were ever visible, no heading, no context.
+     Two-part fix: (1) anchor this one section to the top instead of centering, so the heading is
+     always the first thing in view and any leftover overflow lands at the bottom (the last card, on
+     the shortest phones only) rather than symmetrically eating the top *and* bottom; (2) shrink
+     every size/spacing value in the stack so there's much less overflow left for part 1 to have to
+     tolerate in the first place. Not chasing zero overflow on every device (a heading + lede + 4
+     full live-demo cards is a lot of real content) — chasing "heading and lede always visible, most
+     cards visible, only the last card tight on the very shortest phones" as a real, honest trade-off
+     instead of the previous fully-broken state. */
+  #what-we-do { justify-content: flex-start; padding-top: clamp(84px, 13vh, 112px); padding-bottom: 24px; }
+  .section-head { font-size: 26px; margin-bottom: 14px; }
+  /* flex-shrink:0 itself now lives on the base .wwd-header rule (applies at every width) — see that
+     rule's own comment for the full flexbox explanation. This block only needs to override the
+     size/spacing values here, not re-declare flex-shrink. */
+  .wwd-header { padding: 16px; margin-bottom: 14px; }
+  .wwd-lede {
+    margin-top: 0;
+    font-size: 13px; line-height: 1.5;
+    /* The header's real content height turned out to be the single biggest budget item once
+       flex-shrink:0 (above) let it render at its true size — this lede is genuinely long copy (the
+       section's full thesis + a closing line), and at mobile width would otherwise wrap to 5-6 lines.
+       Capped to 3 (same truncation technique as .wwd-tile p below) so the header's own height stays
+       predictable: enough room for the actual thesis sentence, trading off the closing "ready for your
+       own site next" line on the narrowest screens specifically because that's the one card's worth of
+       height most needed elsewhere for the *cards themselves* to stay on screen. */
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .wwd-grid { gap: 8px; }
+  .wwd-tile { padding: 10px; }
+  .wwd-tile h3 { font-size: 16px; margin-top: 6px; }
+  .wwd-tile p {
+    font-size: 11.5px; margin-top: 4px;
+    /* Caps real, variable-length copy to a predictable 2-line max instead of leaving each card's
+       final height up to however many lines its own text happens to wrap to — standard mobile-card
+       truncation, not content removal (still full text on desktop). */
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  /* Trimmed from 50px — the mobile grid is 1 column (4 tiles stacked, not 2x2 like desktop), so each
+     tile's own height change here is multiplied by 4 in the total, not 2 — a small reduction goes a
+     long way. Reclaims the ~25px of drift this section picked up from other spacing changes made
+     elsewhere in main.css since this value was first tuned (mobile's own explicit overrides here were
+     never touched directly, but the *content* height budget shifted slightly around them). */
+  .wwd-demo { height: 44px; }
 }
