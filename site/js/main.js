@@ -71,6 +71,7 @@
     // Called every tick (not just on scroll) so the WWD idle-pan term inside it keeps animating
     // even while the visitor holds still mid-scroll — see updateFilmFrame's own comment.
     updateFilmFrame();
+    if (SMALL_SCREEN_FRAME_OPTS) updateMobileFrameWindow(Math.round(targetFrame));
     const delta = targetFrame - currentFrame;
     if (Math.abs(delta) < 0.05) currentFrame = targetFrame;
     else currentFrame += delta * FILM_LERP;
@@ -98,26 +99,29 @@
   const loaderFill = loaderEl.querySelector('.loader-fill');
   const loaderPct = loaderEl.querySelector('.loader-pct');
 
-  // `frames` holds all 282 decoded bitmaps for the page's whole lifetime (never evicted), which at
+  // `frames` held all 282 decoded bitmaps for the page's whole lifetime (never evicted), which at
   // native 1920x1080 is ~2.2GB and was overshooting iOS Safari's per-tab memory ceiling, crashing
   // the tab. Decoding straight to 960x540 on small screens keeps each bitmap's real memory footprint
-  // down (~550MB total) without touching source assets or desktop/tablet quality.
+  // down without touching source assets or desktop/tablet quality — but the loader itself had no
+  // cap, so it still eventually fetched/decoded and held *every* frame regardless (~550MB), which
+  // was still crashing real iOS Safari on multiple physical devices, immediately, with zero
+  // scrolling. A first pass at fixing that permanently loaded only every 4th frame on mobile
+  // (~140MB) — safe, but visibly read as sparse/glitchy motion, since 3 of every 4 frames were
+  // never loaded anywhere on the page. Replaced by the windowed cache below: every frame is still
+  // genuinely loadable and gets loaded by the time you scroll to it (same motion quality as
+  // desktop for ordinary scrolling), but only a bounded window around wherever you currently are
+  // is held at once — frames well behind you get released. Desktop has memory headroom to spare and
+  // keeps the original simple "load everything, hold forever" behavior untouched.
   const SMALL_SCREEN_FRAME_OPTS = Math.max(innerWidth, innerHeight) <= 1024
     ? { resizeWidth: SEQ.frameW / 2, resizeHeight: SEQ.frameH / 2, resizeQuality: 'medium' }
     : null;
 
-  // Passes: coarse → fine. Gate the site on the first pass. Mobile stops after a coarser final
-  // pass, skipping the two finest ones entirely — this changes which frame indices ever get
-  // queued at all, not just their loading order, so the sparser set is genuinely never fetched
-  // or held (nearestLoaded() above already falls back to the nearest loaded neighbor for any
-  // index that was never queued, so this reads as slightly coarser motion on fast scrubs, never
-  // a blank/broken frame). Even at the mobile-resized 960x540 decode size, holding *every* one of
-  // the 282 frames forever (~550MB) was still crashing real iOS Safari on multiple physical
-  // devices, immediately on load with zero scrolling — the loader has no cap and just keeps
-  // fetching until all TOTAL frames are held, regardless of device. This cuts what's ever held on
-  // mobile to roughly a quarter of the frames (~140MB), the next lever available short of
-  // abandoning the "everything already loaded, nothing re-fetched mid-scrub" architecture.
-  const passes = SMALL_SCREEN_FRAME_OPTS ? [8, 4] : [8, 4, 2, 1];
+  // Passes: coarse → fine. Gate the site on the first pass. `loadOrder`'s first CRITICAL entries
+  // are exactly the stride-8 pass (passes are appended in order, coarsest first) — this doubles as
+  // the mobile "backbone": a low-density set of frames spread across the *entire* sequence that's
+  // loaded up front and never evicted, so nearestLoaded() always has something reasonably close
+  // even somewhere the windowed cache below hasn't reached yet.
+  const passes = [8, 4, 2, 1];
   const loadOrder = [];
   const seen = new Set();
   for (const stride of passes) {
@@ -127,8 +131,11 @@
   }
   const CRITICAL = Math.ceil(TOTAL / passes[0]);
   let loadedCount = 0;
+  const pendingLoads = new Set();   // in-flight frame indices, so the window scan below can't fire duplicate fetches for the same frame while an earlier one is still resolving
 
   async function loadFrame(i) {
+    if (pendingLoads.has(i)) return;
+    pendingLoads.add(i);
     try {
       const res = await fetch(frameSrc(i));
       if (!res.ok) throw new Error(res.status);
@@ -138,6 +145,8 @@
         : await createImageBitmap(blob);
     } catch {
       frames[i] = 'missing';
+    } finally {
+      pendingLoads.delete(i);
     }
     loadedCount++;
     if (!criticalReady) {
@@ -149,14 +158,46 @@
   }
 
   async function runLoader(concurrency = 6) {
+    // On mobile, the initial greedy loader only fills the backbone (loadOrder's first CRITICAL
+    // entries, the stride-8 pass) — the windowed cache below takes over from there, loading fine
+    // frames on demand as scroll approaches them instead of eagerly loading the whole sequence.
+    const limit = SMALL_SCREEN_FRAME_OPTS ? CRITICAL : loadOrder.length;
     let cursor = 0;
     const workers = Array.from({ length: concurrency }, async () => {
-      while (cursor < loadOrder.length) {
+      while (cursor < limit) {
         const i = loadOrder[cursor++];
         await loadFrame(i);
       }
     });
     await Promise.all(workers);
+  }
+
+  // Mobile-only: keep a moving window of fully fine-grained frames around wherever targetFrame
+  // currently is, loading newly-approached frames on demand and closing+releasing ones that have
+  // drifted well behind. MOBILE_EVICT_MARGIN is wider than MOBILE_WINDOW on purpose (hysteresis) —
+  // without that gap, idle back-and-forth scrubbing right at the window's edge would repeatedly
+  // reload/evict the same frames every tick.
+  const MOBILE_WINDOW = 40;
+  const MOBILE_EVICT_MARGIN = 70;
+  const isBackboneFrame = (i) => i % passes[0] === 0;
+  let mobileWindowCenter = -9999;
+  function updateMobileFrameWindow(center) {
+    if (Math.abs(center - mobileWindowCenter) < 4) return;
+    mobileWindowCenter = center;
+    const lo = Math.max(0, center - MOBILE_WINDOW);
+    const hi = Math.min(TOTAL - 1, center + MOBILE_WINDOW);
+    for (let i = lo; i <= hi; i++) {
+      if (!frames[i]) loadFrame(i);
+    }
+    for (let i = 0; i < TOTAL; i++) {
+      if (isBackboneFrame(i)) continue;
+      if (i >= center - MOBILE_EVICT_MARGIN && i <= center + MOBILE_EVICT_MARGIN) continue;
+      const f = frames[i];
+      if (f && f !== 'missing') {
+        f.close();
+        frames[i] = null;
+      }
+    }
   }
 
   /* ---------- kinetic type ---------- */
