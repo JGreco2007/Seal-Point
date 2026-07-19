@@ -106,8 +106,18 @@
     ? { resizeWidth: SEQ.frameW / 2, resizeHeight: SEQ.frameH / 2, resizeQuality: 'medium' }
     : null;
 
-  // Passes: coarse → fine. Gate the site on the first pass.
-  const passes = [8, 4, 2, 1];
+  // Passes: coarse → fine. Gate the site on the first pass. Mobile stops after a coarser final
+  // pass, skipping the two finest ones entirely — this changes which frame indices ever get
+  // queued at all, not just their loading order, so the sparser set is genuinely never fetched
+  // or held (nearestLoaded() above already falls back to the nearest loaded neighbor for any
+  // index that was never queued, so this reads as slightly coarser motion on fast scrubs, never
+  // a blank/broken frame). Even at the mobile-resized 960x540 decode size, holding *every* one of
+  // the 282 frames forever (~550MB) was still crashing real iOS Safari on multiple physical
+  // devices, immediately on load with zero scrolling — the loader has no cap and just keeps
+  // fetching until all TOTAL frames are held, regardless of device. This cuts what's ever held on
+  // mobile to roughly a quarter of the frames (~140MB), the next lever available short of
+  // abandoning the "everything already loaded, nothing re-fetched mid-scrub" architecture.
+  const passes = SMALL_SCREEN_FRAME_OPTS ? [8, 4] : [8, 4, 2, 1];
   const loadOrder = [];
   const seen = new Set();
   for (const stride of passes) {
