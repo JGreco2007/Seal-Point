@@ -1214,25 +1214,19 @@ a { color: var(--gold); text-decoration: none; }
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
   #what-we-do { max-width: none; }
-  .wwd-grid { grid-template-columns: 1fr; }
+  /* At a 1-column stack, heading + lede + 4 full-size cards add up to real content roughly twice as
+     tall as a typical phone viewport — a previous fix anchored this section to the top and shrank
+     every size/spacing value, accepting the last card would still be tight/overlapping on the
+     shortest phones as an honest trade-off. Replaced by a real fix instead of a trade-off: all 4
+     tiles now share the same grid cell (stacked exactly on top of each other), so the grid's own
+     height is just ONE card's height, not four stacked — main.js's timeline fades each card out as
+     the next scrolls in (mobile only; desktop's 2x2 grid keeps all 4 visible at once, unchanged), so
+     which single card currently occupies that shared cell is what "keep scrolling" advances, the
+     same scroll-reveals-more pattern the portfolio carousel above already uses. */
+  .wwd-grid { grid-template-columns: 1fr; grid-template-rows: 1fr; }
+  .wwd-tile { grid-column: 1; grid-row: 1; }
   #seal-progress { right: 16px; bottom: 16px; width: 44px; height: 44px; }
 
-  /* At the 1-column stack above, heading + lede + 4 full-size cards add up to real content roughly
-     twice as tall as a typical phone viewport. Every .panel (including this one) is vertically
-     *centered* (`.panel`'s own `justify-content: center`, shared by every section) — fine when
-     content is shorter than the viewport, but centering content this much taller than the viewport
-     pushes the TOP half (the heading — the one thing a visitor needs first) above row 0, entirely
-     off-screen, while the grid's own bottom overflows an equal amount below. Confirmed via
-     getBoundingClientRect(): heading top sits at -152px, grid bottom at 964px, against an 812px-tall
-     viewport — i.e. only the *middle* couple of cards were ever visible, no heading, no context.
-     Two-part fix: (1) anchor this one section to the top instead of centering, so the heading is
-     always the first thing in view and any leftover overflow lands at the bottom (the last card, on
-     the shortest phones only) rather than symmetrically eating the top *and* bottom; (2) shrink
-     every size/spacing value in the stack so there's much less overflow left for part 1 to have to
-     tolerate in the first place. Not chasing zero overflow on every device (a heading + lede + 4
-     full live-demo cards is a lot of real content) — chasing "heading and lede always visible, most
-     cards visible, only the last card tight on the very shortest phones" as a real, honest trade-off
-     instead of the previous fully-broken state. */
   #what-we-do { justify-content: flex-start; padding-top: clamp(84px, 13vh, 112px); padding-bottom: 24px; }
   .section-head { font-size: 26px; margin-bottom: 14px; }
   /* flex-shrink:0 itself now lives on the base .wwd-header rule (applies at every width) — see that

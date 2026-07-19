@@ -6,6 +6,11 @@
   const SEQ = window.SEQUENCE;
   const TOTAL = SEQ.clips.reduce((n, c) => n + c.count, 0);
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Same breakpoint .wwd-grid itself switches to a single column at (main.css) — used below to make
+  // the "What we do" cards cycle one at a time on mobile instead of all 4 permanently accumulating.
+  // Evaluated once at boot, not on resize, matching how the rest of this file's one-time layout
+  // decisions (reduceMotion above, sizeCanvas aside) already work.
+  const wwdMobile = matchMedia('(max-width: 900px)').matches;
 
   /* ---------- frame source mapping ---------- */
   const frameSrc = (i) => {
@@ -682,6 +687,16 @@
       { opacity: 0, ...wwdCardFrom[i] },
       { opacity: 1, x: 0, y: 0, rotation: 0, scale: 1, duration: WWD_CARD_DUR, ease: 'power3.out' },
       at);
+    // Mobile only: the 1-column stack (.wwd-grid's own max-width:900px override) can't fit all 4
+    // full-size cards on screen at once — previously handled by shrinking everything and accepting
+    // the last card would be tight/clipped on the shortest phones. Instead, each card now fades back
+    // out as the next one enters, so only one is ever on screen and "keep scrolling" is what reveals
+    // the rest — the same scroll-advances-one-at-a-time pattern the portfolio carousel above already
+    // uses, rather than piling every card into one screen. Desktop's 2x2 grid has real room for all
+    // 4 to stay put, so this only runs at the exact width the CSS itself switches to one column.
+    if (wwdMobile && i > 0) {
+      tl.to(wwdCardSelectors[i - 1], { opacity: 0, duration: WWD_CARD_STEP * 0.6, ease: 'power1.in' }, at);
+    }
   });
   tl.to(panels.whatWeDo, { opacity: 0, y: -50, duration: 36, ease: 'power1.in' }, 835 + SHIFT);
   hide(panels.whatWeDo, 875 + SHIFT);
