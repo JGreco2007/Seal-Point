@@ -1790,11 +1790,24 @@ function realAspect(canvasEl, fallback) {
 // give the canvas. SLAB_HERO_SIZE_MULT makes the hero specifically bigger (not the gallery shots).
 const HERO_ASPECT = 16 / 9;
 const SLAB_HERO_SIZE_MULT = 1.32;
+// Per-canvas setupSlabCanvas() args, captured up front (real layout is measurable pre-open — see
+// realAspect() above, and `.pf-detail` only toggles opacity/visibility, never display — so nothing
+// is lost by waiting) but not *invoked* until that panel's first openDetail(). Each call builds its
+// own WebGLRenderer + decodes a full-res texture; doing that for all 3 panels' hero+shot canvases
+// (9 total) unconditionally at page load was a real, previously-unaddressed cost sitting on top of
+// the scroll-sequence frame memory — 9 extra WebGL contexts and their textures held for the whole
+// page lifetime whether or not the visitor ever opens that panel, compounding with iOS Safari's low
+// per-page cap on simultaneous WebGL contexts. Deferring to first-open cuts the eager count from 10
+// contexts (1 portfolio scene + 9 detail) down to 1, and even then only builds the 3 contexts for
+// whichever single panel was actually opened. Once built, an instance is kept (not torn down on
+// close) so reopening the same panel doesn't pay the WebGLRenderer/texture cost again.
+const _slabPending = new Map();     // canvas element -> setupSlabCanvas() opts, not yet called
+const _slabInitedPanels = new Set();
 function initDetailSlabs() {
   document.querySelectorAll('.pf-detail').forEach((panel) => {
     const heroCanvas = panel.querySelector('.pf-dhero-canvas');
     if (heroCanvas) {
-      setupSlabCanvas(heroCanvas, {
+      _slabPending.set(heroCanvas, {
         aspect: HERO_ASPECT,
         sizeMult: SLAB_HERO_SIZE_MULT,
         videoEl: panel.querySelector('.pf-dhero-video'),
@@ -1805,8 +1818,18 @@ function initDetailSlabs() {
     const shotImages = SLAB_SHOT_IMAGES[panel.id] || [];
     panel.querySelectorAll('.pf-shot-canvas').forEach((c, i) => {
       const shot = shotImages[i];
-      setupSlabCanvas(c, { aspect: shot ? shot.aspect : realAspect(c, 1.25), imageUrl: shot && shot.url });
+      _slabPending.set(c, { aspect: shot ? shot.aspect : realAspect(c, 1.25), imageUrl: shot && shot.url });
     });
+  });
+}
+function ensurePanelSlabsBuilt(id) {
+  if (_slabInitedPanels.has(id)) return;
+  _slabInitedPanels.add(id);
+  const panel = document.getElementById(id);
+  if (!panel) return;
+  panel.querySelectorAll('.pf-dhero-canvas, .pf-shot-canvas').forEach((c) => {
+    const opts = _slabPending.get(c);
+    if (opts) setupSlabCanvas(c, opts);
   });
 }
 // No GLB to wait for any more (plain BoxGeometry, built synchronously) — build immediately.
@@ -1815,6 +1838,7 @@ addEventListener('resize', () => { _slabInstances.forEach((inst) => { if (inst.a
 
 window.__iceFrame = {
   activatePanel(id) {
+    ensurePanelSlabsBuilt(id);
     const panel = document.getElementById(id);
     if (!panel) return;
     panel.querySelectorAll('.pf-dhero-canvas, .pf-shot-canvas').forEach((c) => {
