@@ -98,6 +98,14 @@
   const loaderFill = loaderEl.querySelector('.loader-fill');
   const loaderPct = loaderEl.querySelector('.loader-pct');
 
+  // `frames` holds all 282 decoded bitmaps for the page's whole lifetime (never evicted), which at
+  // native 1920x1080 is ~2.2GB and was overshooting iOS Safari's per-tab memory ceiling, crashing
+  // the tab. Decoding straight to 960x540 on small screens keeps each bitmap's real memory footprint
+  // down (~550MB total) without touching source assets or desktop/tablet quality.
+  const SMALL_SCREEN_FRAME_OPTS = Math.max(innerWidth, innerHeight) <= 1024
+    ? { resizeWidth: SEQ.frameW / 2, resizeHeight: SEQ.frameH / 2, resizeQuality: 'medium' }
+    : null;
+
   // Passes: coarse → fine. Gate the site on the first pass.
   const passes = [8, 4, 2, 1];
   const loadOrder = [];
@@ -115,7 +123,9 @@
       const res = await fetch(frameSrc(i));
       if (!res.ok) throw new Error(res.status);
       const blob = await res.blob();
-      frames[i] = await createImageBitmap(blob);
+      frames[i] = SMALL_SCREEN_FRAME_OPTS
+        ? await createImageBitmap(blob, SMALL_SCREEN_FRAME_OPTS)
+        : await createImageBitmap(blob);
     } catch {
       frames[i] = 'missing';
     }
